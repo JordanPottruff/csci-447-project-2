@@ -28,6 +28,13 @@ class DataSet:
     def get_data(self):
         return self.data
 
+    # Used to handle data sets that involve discrete attribute values. The values in the attribute at the specified
+    # column are converted using the given map from the original value to the new value. This is purposefully abstract
+    # in order for the DataSet class to work with numerous data sets.
+    def convert_attribute(self, col, map):
+        # Will convert attribute values in-place -- no return needed.
+        'empty'
+
     def shuffle(self):
         random.shuffle(self.data)
 
