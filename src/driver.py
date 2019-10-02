@@ -25,8 +25,18 @@ def get_car_data():
     return car_data
 
 
+def get_forest_fires_data():
+    forest_fires_data = ds.DataSet("../data/forestfires.data", 12, list(range(0, 12)))
+    # Remove the first line, which is the header info.
+    forest_fires_data.remove_header()
+    # Convert all columns to floats, including the class column.
+    forest_fires_data.convert_to_float(list(range(0, 13)))
+    return forest_fires_data
+
+
 def main():
     abalone_data = get_abalone_data()
     car_data = get_car_data()
+    forest_fires_data = get_forest_fires_data()
 
 main()

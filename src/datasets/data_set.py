@@ -13,6 +13,9 @@ class DataSet:
     def get_data(self):
         return self.data
 
+    def remove_header(self):
+        self.data = self.data[1:]
+
     # Used to handle data sets that involve discrete attribute values. The values in the attribute at the specified
     # column are converted using the given map from the original value to the new value. This is purposefully abstract
     # in order for the DataSet class to work with numerous data sets.
