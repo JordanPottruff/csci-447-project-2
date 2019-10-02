@@ -34,9 +34,18 @@ def get_forest_fires_data():
     return forest_fires_data
 
 
+def get_machine_data():
+    # There is another final column but we probably want to exclude it.
+    machine_data = ds.DataSet("../data/machine.data", 8, list(range(0, 8)))
+    # Convert all columns except the first two to floats, including the class column.
+    machine_data.convert_to_float(list(range(2, 9)))
+    return machine_data
+
+
 def main():
     abalone_data = get_abalone_data()
     car_data = get_car_data()
     forest_fires_data = get_forest_fires_data()
+    machine_data = get_machine_data()
 
 main()
