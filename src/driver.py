@@ -64,6 +64,7 @@ def main():
     knn = k_nn.KNN(abalone_data, 1)
     print(knn.calc_euclidean_distance())
 
+    knn.find_k_smallest()
 
 
 
