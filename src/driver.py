@@ -1,6 +1,7 @@
 
 import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
+import src.algorithms.knn as k_nn
 
 
 def get_abalone_data():
@@ -57,8 +58,13 @@ def main():
     forest_fires_data = get_forest_fires_data()
     machine_data = get_machine_data()
 
-    km = kmeans.KMeans(machine_data, 2)
-    print(km.centroids)
+    # km = kmeans.KMeans(machine_data, 2)
+    # print(km.centroids)
+
+    knn = k_nn.KNN(abalone_data, 1)
+    print(knn.calc_euclidean_distance())
+
+
 
 
 
