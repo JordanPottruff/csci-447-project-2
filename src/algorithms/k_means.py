@@ -1,5 +1,6 @@
 
 import random as rand
+import src.util as util
 
 # The smallest percentage change in distortion that will NOT stop the centroid calculation.
 DISTORTION_CHANGE_CUTOFF = 0.001
@@ -10,8 +11,11 @@ class KMeans:
     def __init__(self, training_data, k):
         self.training_data = training_data
         self.k = k
-        self.centroids, self.clusters = self.calculate_clusters()
+        self.centroids, self.cluster_classes = self.calculate_clusters()
 
+    # Returns the centroids representing each cluster and the  distribution of classes within each cluster. Both values
+    # are lists, where index i in either list represents the ith cluster. The class distributions are in the form of a
+    # dictionary that maps each class to the frequency of the class in the cluster.
     def calculate_clusters(self):
         # First, generate centroids randomly
         centroids = self.generate_random_centroids()
@@ -41,7 +45,13 @@ class KMeans:
                 distortion_change = (new_distortion - distortion) / distortion
             distortion = new_distortion
 
-        return centroids, clusters
+        # Finally, instead of returning each cluster itself, we are only interested in knowing the class distributions
+        # in each cluster.
+        cluster_classes = [{} for i in range(len(clusters))]
+        for i in range(len(clusters)):
+            cluster_classes[i] = util.calculate_class_distribution(clusters[i], self.training_data.class_col)
+
+        return centroids, cluster_classes
 
     # Creates a list of centroids that are "random." Returns the centroids as a 2D list.
     def generate_random_centroids(self):

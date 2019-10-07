@@ -17,8 +17,8 @@ def test_kmeans():
     km = kmeans.KMeans(three_clusters_data, 3)
     # For verification, each class should have its own cluster:
     print("Clusters from kmeans:")
-    for count, cluster in enumerate(km.clusters, 1):
-        print(str(count) + ": " + str(cluster))
+    for count, cluster_classes in enumerate(km.cluster_classes, 1):
+        print(str(count) + ": " + str(cluster_classes))
 
 
 def main():
