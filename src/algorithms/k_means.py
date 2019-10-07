@@ -1,6 +1,10 @@
 
 import random as rand
 
+# The smallest percentage change in distortion that will NOT stop the centroid calculation.
+DISTORTION_CHANGE_CUTOFF = 0.001
+
+
 class KMeans:
 
     def __init__(self, training_data, k):
@@ -13,9 +17,11 @@ class KMeans:
         centroids = self.generate_random_centroids()
         clusters = []
 
-        # TODO(jordan): will need to remove this n variable and instead evaluate whether the clusters have changed.
-        n = 100
-        while n > 0:
+        distortion = None
+        distortion_change = None
+        # The cluster calculation will continue until we have "converged", which is measured by having a smaller
+        # percentage change in distortion between two cycles than DISTORTION_CHANGE_CUTOFF.
+        while distortion_change is None or abs(distortion_change) >= DISTORTION_CHANGE_CUTOFF:
             # Reset the clusters to have 0 observations.
             clusters = [[] for i in range(self.k)]
 
@@ -28,25 +34,38 @@ class KMeans:
             for i in range(self.k):
                 centroids[i] = self.calculate_cluster_mean(clusters[i])
 
-            n -= 1
+            # Update distortion variables to determine whether to exit the loop now.
+            new_distortion = self.calculate_distortion(clusters, centroids)
+            if distortion is not None:
+                # Percentage change in distortion from the previous set of clusters to these new clusters:
+                distortion_change = (new_distortion - distortion) / distortion
+            distortion = new_distortion
 
         return centroids, clusters
 
-    # Creates a list of centroids that are "random." A centroid is really just a vector of attribute values, so we
-    # accomplish this by randomly selecting an attribute value from our training data. Returns the centroids as a 2D
-    # list.
+    # Creates a list of centroids that are "random." Returns the centroids as a 2D list.
     def generate_random_centroids(self):
-        num_training_data = len(self.training_data.get_data())
-        num_cols = len(self.training_data.get_data()[0])
         centroids = [[] for i in range(self.k)]
-
         # Initialize the means using randomly selected attribute values.
         for i in range(self.k):
-            centroids[i] = [None for i in range(num_cols)]
-            for attr_col in self.training_data.attr_cols:
-                selected_obs = self.training_data.get_data()[rand.randrange(0, num_training_data)]
-                centroids[i][attr_col] = selected_obs[attr_col]
+            centroids[i] = self.generate_random_centroid()
         return centroids
+
+    # Creates a single random centroid. A centroid is really just a vector of attribute values, so we accomplish this
+    # by randomly selecting an attribute value from our training data.
+    def generate_random_centroid(self):
+        num_cols = len(self.training_data.get_data()[0])
+        num_training_data = len(self.training_data.get_data())
+
+        # Initialize the centroid with None values for all columns
+        centroid = [None for i in range(num_cols)]
+        # For the attribute columns, assign a value picked randomly from the training set.
+        for attr_col in self.training_data.attr_cols:
+            # Random pick from the training set:
+            selected_obs = self.training_data.get_data()[rand.randrange(0, num_training_data)]
+            # Assigning that pick's value for the current attribute:
+            centroid[attr_col] = selected_obs[attr_col]
+        return centroid
 
     # Out of the list of all centroids, this will return the corresponding index for the centroid that is closest to the
     # given observation.
@@ -69,6 +88,10 @@ class KMeans:
         num_cols = len(self.training_data.get_data()[0])
         attr_cols = self.training_data.attr_cols
         str_attr_cols = self.training_data.get_str_attr_cols()
+
+        # If the cluster has to items in it, we return the mean as a random coordinate.
+        if len(cluster) == 0:
+            return self.generate_random_centroid()
 
         # The sums and freqs lists are used for calculating the average and mode of numeric and string attributes,
         # respectively. Both have the same number of columns as our observations, but only the columns corresponding
@@ -116,6 +139,16 @@ class KMeans:
 
         # Lastly, we return this mean.
         return mean
+
+    # Calculates the distortion of the given clusters using the training data. Essentially, distortion is a measure of
+    # how far each point is from the cluster it belongs to. We use this to optimize our centroid placement.
+    def calculate_distortion(self, clusters, centroids):
+        distortion = 0
+        for cluster_i in range(len(clusters)):
+            for obs in clusters[cluster_i]:
+                centroid = centroids[cluster_i]
+                distortion += self.training_data.distance(obs, centroid)
+        return distortion
 
     def run(self, example):
         # Placeholder for future return value.
