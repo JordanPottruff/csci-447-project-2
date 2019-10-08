@@ -20,6 +20,7 @@ def calculate_class_distribution(data, class_col):
     return probs
 
 
+# Creates a 2D list from a file.
 def read_file(filename):
     with open(filename) as csvfile:
         data = list(csv.reader(csvfile))

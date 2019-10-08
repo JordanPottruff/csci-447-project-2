@@ -1,5 +1,6 @@
 
 import src.util as util
+import src.loss as loss
 import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
 import src.algorithms.knn as k_nn
@@ -70,14 +71,18 @@ def run_k_means(data_set, k):
     folds = data_set.validation_folds(10)
 
     for i, fold in enumerate(folds):
+        print("Fold " + str(i + 1) + ": ")
         test = fold['test']
         train = fold['train']
         km = kmeans.KMeans(train, k)
-        print("Fold " + str(i) + ": ")
         print(" * distortion = " + str(km.distortion))
 
+        results = []
         for obs in test.data:
-            result = km.run(obs)
+            result = {"expected": obs[data_set.class_col], "actual": km.run(obs)}
+            results.append(result)
+
+        print(" * accuracy = " + str(loss.calc_accuracy(results)))
 
 
 def main():
@@ -86,6 +91,6 @@ def main():
     forest_fires_data = get_forest_fires_data()
     machine_data = get_machine_data()
 
-    run_k_means(abalone_data, 3)
+    run_k_means(abalone_data, 20)
 
 main()
