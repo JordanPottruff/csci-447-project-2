@@ -2,13 +2,18 @@
 
 
 # Calculates the class distribution of a 2D list of data. The distribution is stored in a dictionary that maps each
-# class to the number of times the class is present in the data.
+# class to the proportion of examples in 'data' that have that class.
 def calculate_class_distribution(data, class_col):
-    freq = {}
+    n = len(data)
+    # This is our map of each class to its probability/proportion:
+    probs = {}
     for obs in data:
         class_val = obs[class_col]
-        if class_val in freq:
-            freq[class_val] += 1
+        # We either update the probabilities if the class was already present, or initialize the probability if not.
+        # Note that we divide by n here in order to prevent having to do it in a future iteration of the probability
+        # map.
+        if class_val in probs:
+            probs[class_val] += 1 / n
         else:
-            freq[class_val] = 1
-    return freq
+            probs[class_val] = 1 / n
+    return probs

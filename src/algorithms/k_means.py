@@ -11,6 +11,10 @@ class KMeans:
     def __init__(self, training_data, k):
         self.training_data = training_data
         self.k = k
+        # The centroids and cluster_classes list are used to represent the clusters themselves. centroids[i] is the
+        # centroid for the ith cluster, and cluster_classes[i] is a map of each class to the probability it occurs in
+        # the ith cluster. Note that any classes with 0% probabilities (no training data in the cluster had that class)
+        # are not included in the dictionary.
         self.centroids, self.cluster_classes = self.calculate_clusters()
 
     # Returns the centroids representing each cluster and the  distribution of classes within each cluster. Both values
