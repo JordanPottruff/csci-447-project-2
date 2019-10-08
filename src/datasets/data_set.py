@@ -10,10 +10,11 @@ class DataSet:
     # classes. For example, if you run get_data, it will return a 2D list with all of the columns present, even if a
     # column is neither an attribute or class (i.e. an unused column). To ensure that you are working with the right
     # columns, iterate using the attr_cols or class_col field.
-    def __init__(self, data, class_col, attr_cols):
+    def __init__(self, data, class_col, attr_cols, filename=""):
         self.data = data
         self.class_col = class_col
         self.attr_cols = attr_cols
+        self.filename = filename
 
     # Returns the data as a 2D list.
     def get_data(self):
@@ -94,6 +95,29 @@ class DataSet:
         first = DataSet(self.data[:cutoff], self.class_col, self.attr_cols)
         second = DataSet(self.data[cutoff:], self.class_col, self.attr_cols)
         return first, second
+
+    def validation_folds(self, n):
+        avg_size = len(self.data) / n
+        sections = []
+        for i in range(n):
+            section_data = None
+            # If we are in the final section, we make sure to take all elements to the very end of the data.
+            if i == n-1:
+                sections.append(self.data[math.floor(avg_size*i):])
+            # Otherwise, we use a normal range to create the data for the section.
+            else:
+                sections.append(self.data[math.floor(avg_size*i):math.floor(avg_size*(i+1))])
+
+        folds = [{} for i in range(n)]
+        for i in range(n):
+            folds[i]['test'] = DataSet(sections[i], self.class_col, self.attr_cols)
+            train = []
+            for j in range(n):
+                if i != j:
+                    train += sections[i]
+            folds[i]['train'] = DataSet(train, self.class_col, self.attr_cols)
+        return folds
+
 
     # Prints the data set nicely.
     def print(self):
