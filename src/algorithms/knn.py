@@ -39,15 +39,12 @@ class KNN:
         # Placeholder for future return value.
         return {'first_class': 1/5, 'second_class': 2/5, 'third_class': 2/5}
 
-
-    # TODO This function does not behave the way it should be. Even with normal numbers, the function does not return
-    #   the kth_smallest array.
-    def find_k_smallest(self, arr_distance, kth):
-        list = [9,4,2,4,1,3,6,3,7,3]
-        k = 4
-        k_smallest = list[0:k]
+    # TODO(alan): update this function to take in a list of tuples rather than just distances. The tuple should be a
+    #  pair of each observation with its distance. We then find the k-th tuples with the shortest distance.
+    def find_k_smallest(self, distances, k):
+        k_smallest = distances[0:k]
         largest = max(k_smallest)
-        left_over = list[k:]
+        left_over = distances[k:]
         for item in left_over:
             if item < largest:
                 # We find the largest element in k_smallest now...
