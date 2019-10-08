@@ -42,9 +42,9 @@ class DataSet:
 
         return math.sqrt(sum)
 
-    # Removes the first row from the data. Use if there is header information in that row.
-    def remove_header(self):
-        self.data = self.data[1:]
+    # Removes the first 'length' rows from the data. Use if there is header information.
+    def remove_header(self, length):
+        self.data = self.data[length:]
 
     # Used to handle data sets that involve discrete attribute values. The values in the attribute at the specified
     # column are converted using the given map from the original value to the new value. This is purposefully abstract
@@ -81,7 +81,11 @@ class DataSet:
 
             # Replace each column value with it's z-score.
             for row in self.data:
-                z_score = (row[col] - mean) / standard_deviation
+                # If the standard deviation is 0, we just assign the z_score as 0 (no variation from mean).
+                z_score = 0
+                if standard_deviation != 0:
+                    # Otherwise we can use the standard calculation for z_scores.
+                    z_score = (row[col] - mean) / standard_deviation
                 row[col] = z_score
 
     # Shuffles the rows in the data randomly.
