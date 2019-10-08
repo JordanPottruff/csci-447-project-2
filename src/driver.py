@@ -22,6 +22,8 @@ def get_abalone_data():
     abalone_data.convert_to_float(numeric_columns)
     # Normalize values
     abalone_data.normalize_z_score(numeric_columns)
+    # Randomly shuffle values.
+    abalone_data.shuffle()
     return abalone_data
 
 
@@ -38,6 +40,8 @@ def get_car_data():
     numeric_columns = list(range(0, 6))
     # Normalize values.
     car_data.normalize_z_score(numeric_columns)
+    # Randomly shuffle values.
+    car_data.shuffle()
     return car_data
 
 
@@ -51,6 +55,8 @@ def get_forest_fires_data():
     forest_fires_data.convert_to_float([0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12])
     # Normalize values.
     forest_fires_data.normalize_z_score([0, 1, 4, 5, 6, 7, 8, 9, 10, 11])
+    # Randomly shuffle values.
+    forest_fires_data.shuffle()
     return forest_fires_data
 
 
@@ -62,6 +68,8 @@ def get_machine_data():
     machine_data.convert_to_float(list(range(2, 8)))
     # Normalize values.
     machine_data.normalize_z_score(list(range(2, 8)))
+    # Randomly shuffle values.
+    machine_data.shuffle()
     return machine_data
 
 
@@ -74,6 +82,8 @@ def get_segmentation_data():
     segmentation_data.convert_to_float(list(range(1, 20)))
     # Normalize values.
     segmentation_data.normalize_z_score(list(range(1, 20)))
+    # Randomly shuffle values.
+    segmentation_data.shuffle()
     return segmentation_data
 
 
@@ -84,6 +94,8 @@ def get_wine_data():
     wine_data.convert_to_float(list(range(1, 14)))
     # Normalize values.
     wine_data.normalize_z_score(list(range(1, 14)))
+    # Randomly shuffle values.
+    wine_data.shuffle()
     return wine_data
 
 
