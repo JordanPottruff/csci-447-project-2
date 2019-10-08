@@ -1,4 +1,5 @@
 # Here we can store functions that are useful across all algorithms.
+import csv
 
 
 # Calculates the class distribution of a 2D list of data. The distribution is stored in a dictionary that maps each
@@ -17,3 +18,14 @@ def calculate_class_distribution(data, class_col):
         else:
             probs[class_val] = 1 / n
     return probs
+
+
+# Creates a 2D list from a file.
+def read_file(filename):
+    with open(filename) as csvfile:
+        data = list(csv.reader(csvfile))
+    empty_removed = []
+    for line in data:
+        if line:
+            empty_removed.append(line)
+    return empty_removed
