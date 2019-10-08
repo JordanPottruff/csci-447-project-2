@@ -60,11 +60,11 @@ def main():
 
     # km = kmeans.KMeans(machine_data, 2)
     # print(km.centroids)
-
+    test = ['M', -0.008889999551080878, -0.0066865341554053145, -0.016469578343283654, -0.00993193661287392,
+            -0.009402569219692621, -0.011236496693245597, -0.00987497614459177, '15']
     knn = k_nn.KNN(abalone_data, 1)
-    print(knn.calc_euclidean_distance())
+    print(knn.calc_euclidean_distance(test))
 
-    knn.find_k_smallest()
 
 
 
