@@ -90,7 +90,7 @@ def main():
     car_data = get_car_data()
     forest_fires_data = get_forest_fires_data()
     machine_data = get_machine_data()
-
+    # run_k_means(abalone_data, 20)
 
     # km = kmeans.KMeans(machine_data, 2)
     # print(km.centroids)
@@ -99,9 +99,5 @@ def main():
     knn = k_nn.KNN(abalone_data, 10)
     knn.calc_euclidean_distance(test)
 
-
-
-
-    run_k_means(abalone_data, 20)
 
 main()

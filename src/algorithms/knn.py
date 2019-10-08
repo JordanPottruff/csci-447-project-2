@@ -17,9 +17,11 @@ class KNN:
             transformed_array = [groups[i] for i in attribute_columns]
             test_point = [test_point[i] for i in attribute_columns]
             self.distance.append(self.training_data.distance(transformed_array, test_point))
-        self.find_k_smallest(self.distance, self.k)
-        print("SORTED: ")
+        k_smallest = self.find_k_smallest(self.distance, self.k)
+        print("Original: ")
         print(sorted(self.distance))
+        print("K-smallest")
+        print(sorted(k_smallest))
 
 
         ## Specific to abalone data ----------------
@@ -56,7 +58,6 @@ class KNN:
                 k_smallest[max_index] = item
                 # this can be optimized more by doing it in the previous loop, but for simplicity we can just use min.
                 largest = max(k_smallest)
-        print("k smallest: ")
-        print(k_smallest)
+        return k_smallest
 
 
