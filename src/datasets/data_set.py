@@ -91,10 +91,8 @@ class DataSet:
     # observations should fall into the first 2D list.
     def partition(self, first_percentage):
         cutoff = math.floor(first_percentage * len(self.data))
-
-        first = self.data[:cutoff]
-        second = self.data[cutoff:]
-
+        first = DataSet(self.data[:cutoff], self.class_col, self.attr_cols)
+        second = DataSet(self.data[cutoff:], self.class_col, self.attr_cols)
         return first, second
 
     # Prints the data set nicely.
