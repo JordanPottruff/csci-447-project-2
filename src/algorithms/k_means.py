@@ -165,5 +165,5 @@ class KMeans:
         return distortion
 
     def run(self, example):
-        # Placeholder for future return value.
-        return {'first_class': 1 / 5, 'second_class': 2 / 5, 'third_class': 2 / 5}
+        closest_centroid_i = self.find_closest_centroid(example, self.centroids)
+        return self.cluster_classes[closest_centroid_i]

@@ -1,5 +1,4 @@
 
-import csv
 import random
 import math
 
@@ -11,8 +10,8 @@ class DataSet:
     # classes. For example, if you run get_data, it will return a 2D list with all of the columns present, even if a
     # column is neither an attribute or class (i.e. an unused column). To ensure that you are working with the right
     # columns, iterate using the attr_cols or class_col field.
-    def __init__(self, filename, class_col, attr_cols):
-        self.data = read_file(filename)
+    def __init__(self, data, class_col, attr_cols):
+        self.data = data
         self.class_col = class_col
         self.attr_cols = attr_cols
 
@@ -104,21 +103,3 @@ class DataSet:
         for row in self.data:
             print(row)
         print()
-
-
-def read_file(filename):
-    with open(filename) as csvfile:
-        data = list(csv.reader(csvfile))
-    empty_removed = []
-    for line in data:
-        if line:
-            empty_removed.append(line)
-    return empty_removed
-
-
-def is_float(value):
-    try:
-        float(value)
-        return True
-    except ValueError:
-        return False

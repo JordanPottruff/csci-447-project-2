@@ -1,11 +1,13 @@
 # This file can be used for testing out simplified data sets.
 
+import src.util as util
 import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
 
 
 def get_three_clusters_data():
-    three_clusters_data = ds.DataSet("../data/test/three_clusters.data", 2, [0,1])
+    data = util.read_file("../data/test/three_clusters.data")
+    three_clusters_data = ds.DataSet(data, 2, [0,1])
     three_clusters_data.convert_to_float([0, 1])
     three_clusters_data.normalize_z_score([0, 1])
     return three_clusters_data

@@ -1,11 +1,13 @@
 
+import src.util as util
 import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
 import src.algorithms.knn as k_nn
 
 
 def get_abalone_data():
-    abalone_data = ds.DataSet("../data/abalone.data", 8, list(range(0, 8)))
+    data = util.read_file("../data/abalone.data")
+    abalone_data = ds.DataSet(data, 8, list(range(0, 8)))
     numeric_columns = list(range(1, 8))
     # Convert attribute columns to floats
     abalone_data.convert_to_float(numeric_columns)
@@ -15,7 +17,8 @@ def get_abalone_data():
 
 
 def get_car_data():
-    car_data = ds.DataSet("../data/car.data", 6, list(range(0, 6)))
+    data = util.read_file("../data/car.data")
+    car_data = ds.DataSet(data, 6, list(range(0, 6)))
     # Convert attribute columns to numeric scheme
     car_data.convert_attribute(0, {'low': 0, 'med': 1, 'high': 2, 'vhigh': 3})
     car_data.convert_attribute(1, {'low': 0, 'med': 1, 'high': 2, 'vhigh': 3})
@@ -30,7 +33,8 @@ def get_car_data():
 
 
 def get_forest_fires_data():
-    forest_fires_data = ds.DataSet("../data/forestfires.data", 12, list(range(0, 12)))
+    data = util.read_file("../data/forestfires.data")
+    forest_fires_data = ds.DataSet(data, 12, list(range(0, 12)))
     numeric_columns = [0, 1] + list(range(4, 13))
     # Remove the first line, which is the header info.
     forest_fires_data.remove_header()
@@ -42,14 +46,25 @@ def get_forest_fires_data():
 
 
 def get_machine_data():
+    data = util.read_file("../data/machine.data")
     # There is another final column but we probably want to exclude it.
-    machine_data = ds.DataSet("../data/machine.data", 8, list(range(0, 8)))
+    machine_data = ds.DataSet(data, 8, list(range(0, 8)))
     numeric_columns = list(range(2, 9))
     # Convert all columns except the first two to floats, including the class column.
     machine_data.convert_to_float(numeric_columns)
     # Normalize values.
     machine_data.normalize_z_score(numeric_columns)
     return machine_data
+
+
+def run_k_means(data_set, k):
+    print("-------")
+    print("K-MEANS")
+    print("-------")
+    print("DataSet: " + data_set.filename)
+    print("Initializing k-means: finding centroids...")
+    km = kmeans.KMeans(data_set, k)
+    print("Running k-means: ")
 
 
 def main():
