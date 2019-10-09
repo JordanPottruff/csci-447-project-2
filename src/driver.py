@@ -3,8 +3,11 @@ import src.util as util
 import src.loss as loss
 import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
+import src.algorithms.pam_nn as pamnn
 import src.algorithms.knn as k_nn
+
 import src.algorithms.edited_knn as e_nn
+import src.algorithms.condensed_knn as ck_nn
 
 
 ABALONE_DATA_FILE = "../data/abalone.data"
@@ -105,6 +108,7 @@ def run_k_means(data_set, k):
     print("K-MEANS")
     print("-------")
     print("Data Set: " + data_set.filename)
+    print("n = " + str(len(data_set.data)))
     folds = data_set.validation_folds(10)
     print()
     print("10-Fold Cross Validation:")
@@ -135,11 +139,50 @@ def run_k_means(data_set, k):
     print(" * avg hinge = " + str(avg_hinge))
     print()
 
-def run_knn(data_set, k):
+
+def run_pam(data_set, k):
+
     print("-------")
-    print("KNN")
+    print("PAM-NN")
     print("-------")
     print("Data Set: " + data_set.filename)
+    print("n = " + str(len(data_set.data)))
+    folds = data_set.validation_folds(10)
+    print()
+    print("10-Fold Cross Validation:")
+
+    avg_accuracy = 0
+    avg_hinge = 0
+    for i, fold in enumerate(folds):
+        print("Fold " + str(i + 1) + ": ")
+        test = fold['test']
+        train = fold['train']
+        pam = pamnn.PamNN(train, k)
+        print(" * distortion = " + str(pam.distortion))
+
+        results = []
+        for obs in test.data:
+            result = {"expected": obs[data_set.class_col], "actual": pam.run(obs)}
+            results.append(result)
+
+        accuracy = loss.calc_accuracy(results)
+        hinge = loss.calc_hinge(results)
+        print(" * accuracy = " + str(accuracy))
+        print(" * hinge loss = " + str(hinge))
+        avg_accuracy += accuracy / len(folds)
+        avg_hinge += hinge / len(folds)
+    print("")
+    print("Final Results: ")
+    print(" * avg accuracy = " + str(avg_accuracy))
+    print(" * avg hinge = " + str(avg_hinge))
+    print()
+
+def run_knn(data_set, k):
+    print("---")
+    print("KNN")
+    print("---")
+    print("Data Set: " + data_set.filename)
+    print("n = " + str(len(data_set.data)))
     folds = data_set.validation_folds(10)
     print()
     print("10-Fold Cross Validation:")
@@ -151,8 +194,6 @@ def run_knn(data_set, k):
         test = fold['test']
         train = fold['train']
         knn = k_nn.KNN(train, k)
-
-        # print(" * distortion = " + str(knn.distortion))
 
         results = []
         hc = []
@@ -210,6 +251,42 @@ def run_enn(data_set, k):
     print()
 
 
+def run_condensed_knn(data_set, k):
+    print("------------")
+    print("CondensedKNN")
+    print("------------")
+    print("Data Set: " + data_set.filename)
+    print("n = " + str(len(data_set.data)))
+    folds = data_set.validation_folds(10)
+    print()
+    print("10-Fold Cross Validation:")
+
+    avg_accuracy = 0
+    avg_hinge = 0
+    for i, fold in enumerate(folds):
+        print("Fold " + str(i + 1) + ": ")
+        test = fold['test']
+        train = fold['train']
+        cknn = ck_nn.KNN(train, k)
+
+        results = []
+        for obs in test.data:
+            result = {"expected": obs[data_set.class_col], "actual": cknn.run(obs)}
+            results.append(result)
+
+        accuracy = loss.calc_accuracy(results)
+        hinge = loss.calc_hinge(results)
+        print(" * edited n = " + str(len(cknn.training_data.data)))
+        print(" * accuracy = " + str(accuracy))
+        print(" * hinge loss = " + str(hinge))
+        avg_accuracy += accuracy / len(folds)
+        avg_hinge += hinge / len(folds)
+    print("")
+    print("Final Results: ")
+    print(" * avg accuracy = " + str(avg_accuracy))
+    print(" * avg hinge = " + str(avg_hinge))
+    print()
+
 def test_knn(data_set, k):
     knn = k_nn.KNN(data_set, k)
 
@@ -238,6 +315,7 @@ def main():
     machine_data = get_machine_data()
     wine_data = get_wine_data()
 
+
     # Run k means algorithm
     # TODO: replace these k's with the size of the edited KNN training set.
     # run_k_means(abalone_data, 20)
@@ -256,7 +334,8 @@ def main():
     # run_enn(car_data, 3)
     # run_enn(segmentation_data, 3)
 
-
+    # Run PAM_NN algorithm
+    # run_pam(car_data, 5)
 
 
 main()
