@@ -1,5 +1,6 @@
 import math
 import src.datasets.data_set as ds
+import src.util as util
 
 
 class KNN:
@@ -8,34 +9,41 @@ class KNN:
         self.training_data = training_data
         self.k = k
         self.distance = []
-
+    # Input the example test, output a list of tuples with (distance, class)
     def calc_euclidean_distance(self, test_point):
         data = self.training_data.get_data()
         attribute_columns = self.training_data.attr_cols
-        print(attribute_columns)
+        class_columns = self.training_data.class_col
         for groups in data:
             transformed_array = [groups[i] for i in attribute_columns]
             test_point = [test_point[i] for i in attribute_columns]
-            self.distance.append(self.training_data.distance(transformed_array, test_point))
+
+            self.distance.append((self.training_data.distance(transformed_array, test_point), groups[class_columns]))
+
         k_smallest = self.find_k_smallest(self.distance, self.k)
-        print("Original: ")
-        print(sorted(self.distance))
-        print("K-smallest")
-        print(sorted(k_smallest))
+        # print(k_smallest)
+        return k_smallest
+
+    def calc_probability(self, distance_array):
+
+        classification = []
+        for i in range(len(distance_array)):
+            classification.append((distance_array[i][1]))
+        # print(classification)
+        class_probability = util.count_requency(classification)
+        class_length = len(classification)
+        for key, value in class_probability.items():
+            class_probability[key] = float(value / class_length)
+        # print(class_length)
+        # print(class_probability)
+        return class_probability
 
 
-        ## Specific to abalone data ----------------
-        # class_col = 8
-        # attribute_col = list(range(8))
-        # sum = 0
-        # for groups in training_data:
-        #      for feature in points[groups]:
-        #           i = 0
-        #           sum += (feature[attribute_cols[i] - test_point[attribute_cols[i++])**2
-        #           distance.append(math.sqrt(sum))
-        # distance.sorted(distance)
-        ## get Kth largest value from the distance list.
-        return self.distance
+
+
+
+
+
 
     def run(self):
         # Placeholder for future return value.

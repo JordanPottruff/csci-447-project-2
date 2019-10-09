@@ -29,3 +29,12 @@ def read_file(filename):
         if line:
             empty_removed.append(line)
     return empty_removed
+
+def count_requency(my_list):
+        freq = {}
+        for item in my_list:
+            if item in freq:
+                freq[item] += 1
+            else:
+                freq[item] = 1
+        return freq
