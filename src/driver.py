@@ -5,6 +5,8 @@ import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
 import src.algorithms.pam_nn as pamnn
 import src.algorithms.knn as k_nn
+
+import src.algorithms.edited_knn as e_nn
 import src.algorithms.condensed_knn as ck_nn
 
 
@@ -139,6 +141,7 @@ def run_k_means(data_set, k):
 
 
 def run_pam(data_set, k):
+
     print("-------")
     print("PAM-NN")
     print("-------")
@@ -193,8 +196,46 @@ def run_knn(data_set, k):
         knn = k_nn.KNN(train, k)
 
         results = []
+        hc = []
         for obs in test.data:
             result = {"expected": obs[data_set.class_col], "actual": knn.run(obs)}
+            results.append(result)
+
+        accuracy = loss.calc_accuracy(results)
+        hinge = loss.calc_hinge(results)
+        print(" * accuracy = " + str(accuracy))
+        print(" * hinge loss = " + str(hinge))
+        avg_accuracy += accuracy / len(folds)
+        avg_hinge += hinge / len(folds)
+    print("")
+    print("Final Results: ")
+    print(" * avg accuracy = " + str(avg_accuracy))
+    print(" * avg hinge = " + str(avg_hinge))
+    print()
+
+def run_enn(data_set, k):
+    # enn = e_nn.EditedKNN(data_set, k)
+    print("-------")
+    print("KNN")
+    print("-------")
+    print("Data Set: " + data_set.filename)
+    folds = data_set.validation_folds(10)
+    print()
+    print("10-Fold Cross Validation:")
+
+    avg_accuracy = 0
+    avg_hinge = 0
+    for i, fold in enumerate(folds):
+        print("Fold " + str(i + 1) + ": ")
+        test = fold['test']
+        train = fold['train']
+        enn = e_nn.EditedKNN(train, k)
+
+        # print(" * distortion = " + str(knn.distortion))
+
+        results = []
+        for obs in test.data:
+            result = {"expected": obs[data_set.class_col], "actual": enn.run(obs)}
             results.append(result)
 
         accuracy = loss.calc_accuracy(results)
@@ -262,19 +303,18 @@ def test_knn(data_set, k):
     print("Accuracy: " + str(loss.calc_accuracy(results)))
 
 
-
 def main():
-    # Open data sets
+    # Classification data sets
     abalone_data = get_abalone_data()
     car_data = get_car_data()
+    segmentation_data = get_segmentation_data()
+    # Regression data sets
     forest_fires_data = get_forest_fires_data()
     machine_data = get_machine_data()
-    segmentation_data = get_segmentation_data()
     wine_data = get_wine_data()
 
     run_pam(segmentation_data, 5)
     # run_knn(car_data, 5)
-
 
 
 main()
