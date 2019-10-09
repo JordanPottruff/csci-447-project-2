@@ -48,7 +48,8 @@ def calc_huber_loss(results):
     for result in results:
         expected_val = result['expected'] # Use log to make data difference smaller
         actual_val = get_expected_value(result['actual']) # Use log to make data difference smaller
-        if actual_val - expected_val <= .9:
+        hyper_param = .9
+        if actual_val - expected_val <= hyper_param:
             huber_loss_sum += (actual_val - expected_val)**2
         else:
             huber_loss_sum += abs(actual_val - expected_val)
