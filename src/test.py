@@ -55,7 +55,7 @@ def main():
             print(row)
         print()
         print()
-    #test_pam()
+    test_pam()
 
 
 main()

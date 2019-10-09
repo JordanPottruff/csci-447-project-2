@@ -20,6 +20,9 @@ def calculate_class_distribution(data, class_col):
             probs[class_val] = 1 / n
     return probs
 
+def display_class_distribution(classes):
+    pass
+
 
 # This function takes in a probability distribution, outputs the class corresponding to the maximum probability
 def get_highest_class(classes:dict) -> str:

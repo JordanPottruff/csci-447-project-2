@@ -220,7 +220,7 @@ def run_knn(data_set, k):
 def run_enn(data_set, k):
     # enn = e_nn.EditedKNN(data_set, k)
     print("-------")
-    print("KNN")
+    print("ENN")
     print("-------")
     print("Data Set: " + data_set.filename)
     folds = data_set.validation_folds(10)
@@ -233,7 +233,10 @@ def run_enn(data_set, k):
         print("Fold " + str(i + 1) + ": ")
         test = fold['test']
         train = fold['train']
+        print("Original Data Size: " + str(len(train.get_data())))
         enn = e_nn.EditedKNN(train, k)
+        print("After ENN Data Size: " + str(len(enn.training_data.get_data())))
+
 
         # print(" * distortion = " + str(knn.distortion))
 
@@ -318,8 +321,11 @@ def main():
     wine_data = get_wine_data()
 
     # run_pam(segmentation_data, 5)
-    run_knn(segmentation_data, 5)
-    run_k_means(segmentation_data, 20)
+    # run_knn(segmentation_data, 5)
+    # run_k_means(segmentation_data, 20)
+
+    # run_enn(car_data, 5)
+
 
 
 main()
