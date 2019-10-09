@@ -79,13 +79,17 @@ def get_machine_data():
 
 def get_segmentation_data():
     data = util.read_file(SEGMENTATION_DATA_FILE)
-    segmentation_data = ds.DataSet(data, 0, list(range(1, 20)), SEGMENTATION_DATA_FILE)
+    # Attribute columns are all numeric
+    #  * Attribute #7, vedge-sd, removed because it is a standard deviation.
+    #  * Attribute #9, hedge-sd, removed for same reason.
+    attr_cols = [1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    segmentation_data = ds.DataSet(data, 0, attr_cols, SEGMENTATION_DATA_FILE)
     # Remove the first 5 lines, which is reserved for the header.
     segmentation_data.remove_header(5)
     # Convert all attribute columns to numeric values.
-    segmentation_data.convert_to_float(list(range(1, 20)))
+    segmentation_data.convert_to_float(attr_cols)
     # Normalize values.
-    segmentation_data.normalize_z_score(list(range(1, 20)))
+    segmentation_data.normalize_z_score(attr_cols)
     # Randomly shuffle values.
     segmentation_data.shuffle()
     return segmentation_data
@@ -313,8 +317,9 @@ def main():
     machine_data = get_machine_data()
     wine_data = get_wine_data()
 
-    run_pam(segmentation_data, 5)
-    # run_knn(car_data, 5)
+    # run_pam(segmentation_data, 5)
+    run_knn(segmentation_data, 5)
+    run_k_means(segmentation_data, 20)
 
 
 main()
