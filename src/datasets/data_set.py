@@ -1,7 +1,14 @@
 
 import random
 import math
+import src.util as util
 
+ABALONE_DATA_FILE = "../data/abalone.data"
+CAR_DATA_FILE = "../data/car.data"
+FOREST_FIRE_DATA_FILE = "../data/forestfires.data"
+MACHINE_DATA_FILE = "../data/machine.data"
+SEGMENTATION_DATA_FILE = "../data/segmentation.data"
+WINE_DATA_FILE = "../data/winequality.data"
 
 class DataSet:
 
@@ -122,10 +129,98 @@ class DataSet:
             folds[i]['train'] = DataSet(train, self.class_col, self.attr_cols)
         return folds
 
-
     # Prints the data set nicely.
     def print(self):
         print()
         for row in self.data:
             print(row)
         print()
+
+
+def get_abalone_data():
+    data = util.read_file(ABALONE_DATA_FILE)
+    abalone_data = DataSet(data, 8, list(range(0, 8)), ABALONE_DATA_FILE)
+    numeric_columns = list(range(1, 9))
+    # Convert attribute columns to floats
+    abalone_data.convert_to_float(numeric_columns)
+    # Normalize values
+    abalone_data.normalize_z_score(numeric_columns)
+    # Randomly shuffle values.
+    abalone_data.shuffle()
+    return abalone_data
+
+
+def get_car_data():
+    data = util.read_file(CAR_DATA_FILE)
+    car_data = DataSet(data, 6, list(range(0, 6)), CAR_DATA_FILE)
+    # Convert attribute columns to numeric scheme
+    car_data.convert_attribute(0, {'low': 0, 'med': 1, 'high': 2, 'vhigh': 3})
+    car_data.convert_attribute(1, {'low': 0, 'med': 1, 'high': 2, 'vhigh': 3})
+    car_data.convert_attribute(2, {'2': 2, '3': 3, '4': 4, '5more': 5})
+    car_data.convert_attribute(3, {'2': 2, '4': 4, 'more': 5})
+    car_data.convert_attribute(4, {'small': 0, 'med': 1, 'big': 2})
+    car_data.convert_attribute(5, {'low': 0, 'med': 1, 'high': 2})
+    numeric_columns = list(range(0, 6))
+    # Normalize values.
+    car_data.normalize_z_score(numeric_columns)
+    # Randomly shuffle values.
+    car_data.shuffle()
+    return car_data
+
+
+def get_forest_fires_data():
+    data = util.read_file(FOREST_FIRE_DATA_FILE)
+    forest_fires_data = DataSet(data, 12, list(range(0, 12)), FOREST_FIRE_DATA_FILE)
+    numeric_columns = [0, 1] + list(range(4, 13))
+    # Remove the first line, which is the header info.
+    forest_fires_data.remove_header(1)
+    # Convert applicable columns to floats, including the class column.
+    forest_fires_data.convert_to_float([0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    # Normalize values.
+    forest_fires_data.normalize_z_score([0, 1, 4, 5, 6, 7, 8, 9, 10, 11])
+    # Randomly shuffle values.
+    forest_fires_data.shuffle()
+    return forest_fires_data
+
+
+def get_machine_data():
+    data = util.read_file(MACHINE_DATA_FILE)
+    # There is another final column but we probably want to exclude it.
+    machine_data = DataSet(data, 8, list(range(0, 8)), MACHINE_DATA_FILE)
+    # Convert all columns except the first two to floats, including the class column.
+    machine_data.convert_to_float(list(range(2, 9)))
+    # Normalize values.
+    machine_data.normalize_z_score(list(range(2, 8)))
+    # Randomly shuffle values.
+    machine_data.shuffle()
+    return machine_data
+
+
+def get_segmentation_data():
+    data = util.read_file(SEGMENTATION_DATA_FILE)
+    # Attribute columns are all numeric
+    #  * Attribute #7, vedge-sd, removed because it is a standard deviation.
+    #  * Attribute #9, hedge-sd, removed for same reason.
+    attr_cols = [1, 2, 3, 4, 5, 6, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+    segmentation_data = DataSet(data, 0, attr_cols, SEGMENTATION_DATA_FILE)
+    # Remove the first 5 lines, which is reserved for the header.
+    segmentation_data.remove_header(5)
+    # Convert all attribute columns to numeric values.
+    segmentation_data.convert_to_float(attr_cols)
+    # Normalize values.
+    segmentation_data.normalize_z_score(attr_cols)
+    # Randomly shuffle values.
+    segmentation_data.shuffle()
+    return segmentation_data
+
+
+def get_wine_data():
+    data = util.read_file(WINE_DATA_FILE)
+    wine_data = DataSet(data, 11, list(range(0, 11)), WINE_DATA_FILE)
+    # Convert all attribute columns to numeric values.
+    wine_data.convert_to_float(list(range(0, 12)))
+    # Normalize values.
+    wine_data.normalize_z_score(list(range(0, 11)))
+    # Randomly shuffle values.
+    wine_data.shuffle()
+    return wine_data
