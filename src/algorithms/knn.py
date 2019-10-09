@@ -17,15 +17,12 @@ class KNN:
         for groups in data:
             transformed_array = [groups[i] for i in attribute_columns]
             test_point = [test_point[i] for i in attribute_columns]
-
             self.distance.append((self.training_data.distance(transformed_array, test_point), groups[class_columns]))
-
         k_smallest = self.find_k_smallest(self.distance, self.k)
         # print(k_smallest)
         return k_smallest
 
     def calc_probability(self, distance_array):
-
         classification = []
         for i in range(len(distance_array)):
             classification.append((distance_array[i][1]))
@@ -34,20 +31,11 @@ class KNN:
         class_length = len(classification)
         for key, value in class_probability.items():
             class_probability[key] = float(value / class_length)
-        # print(class_length)
-        # print(class_probability)
         return class_probability
 
-
-
-
-
-
-
-
-    def run(self):
-        # Placeholder for future return value.
-        return {'first_class': 1/5, 'second_class': 2/5, 'third_class': 2/5}
+    def run(self, example):
+        distance = self.calc_euclidean_distance(example)
+        return self.calc_probability(distance)
 
     # TODO(alan): update this function to take in a list of tuples rather than just distances. The tuple should be a
     #  pair of each observation with its distance. We then find the k-th tuples with the shortest distance.

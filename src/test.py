@@ -3,10 +3,9 @@
 import src.util as util
 import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
-
+import src.algorithms.knn as knn
 
 THREE_CLUSTERS_DATA_FILE = "../data/test/three_clusters.data"
-
 
 def get_three_clusters_data():
     data = util.read_file(THREE_CLUSTERS_DATA_FILE)
@@ -26,8 +25,21 @@ def test_kmeans():
         print(str(count) + ": " + str(cluster_classes))
 
 
+def test_knn():
+    test_knn_data = get_three_clusters_data()
+    test = [4,3,'A']
+    # CAUTION: test variable is not normalized but the data is
+    kn = knn.KNN(test_knn_data, 22)
+    print(kn.run(test))
+
+
+
+
+
 def main():
-    test_kmeans()
+    pass
+    # test_kmeans()
+    # test_knn()
 
 
 main()

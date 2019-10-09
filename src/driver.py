@@ -134,6 +134,44 @@ def run_k_means(data_set, k):
     print(" * avg hinge = " + str(avg_hinge))
     print()
 
+def run_knn(data_set, k):
+    print("-------")
+    print("KNN")
+    print("-------")
+    print("Data Set: " + data_set.filename)
+    folds = data_set.validation_folds(10)
+    print()
+    print("10-Fold Cross Validation:")
+
+    avg_accuracy = 0
+    avg_hinge = 0
+    for i, fold in enumerate(folds):
+        print("Fold " + str(i + 1) + ": ")
+        test = fold['test']
+        train = fold['train']
+        knn = k_nn.KNN(train, k)
+
+        # print(" * distortion = " + str(knn.distortion))
+
+        results = []
+        for obs in test.data:
+            result = {"expected": obs[data_set.class_col], "actual": knn.run(obs)}
+            results.append(result)
+
+        accuracy = loss.calc_accuracy(results)
+        hinge = loss.calc_hinge(results)
+        print(" * accuracy = " + str(accuracy))
+        print(" * hinge loss = " + str(hinge))
+        avg_accuracy += accuracy / len(folds)
+        avg_hinge += hinge / len(folds)
+    print("")
+    print("Final Results: ")
+    print(" * avg accuracy = " + str(avg_accuracy))
+    print(" * avg hinge = " + str(avg_hinge))
+    print()
+
+
+
 
 def main():
     # Open data sets
@@ -152,11 +190,15 @@ def main():
 
     # km = kmeans.KMeans(machine_data, 2)
     # print(km.centroids)
+
+    # Run knn algorithm
+    run_knn(abalone_data, 3)
     # test = ['M', -0.008889999551080878, -0.0066865341554053145, -0.016469578343283654, -0.00993193661287392,
     #         -0.009402569219692621, -0.011236496693245597, -0.00987497614459177, '15']
     # knn = k_nn.KNN(abalone_data, 9)
     # distance = knn.calc_euclidean_distance(test)
-    # knn.calc_probability(distance)
+    # print(knn.calc_probability(distance))
+
 
 
 main()
