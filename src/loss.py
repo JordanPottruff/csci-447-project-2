@@ -33,9 +33,9 @@ def calc_log_cosh(results):
     log_cosh_sum = 0
     # For each result generated from test set
     for result in results:
-        expected_val = result['expected']
-        actual_val = get_expected_value(result['actual'])
-        log_cosh_sum += math.log(math.cosh(expected_val - actual_val))
+        expected_val = math.log(result['expected']) # Use log to make data difference smaller
+        actual_val = math.log(get_expected_value(result['actual'])) # Use log to make data difference smaller
+        10**log_cosh_sum += math.log(math.cosh(expected_val - actual_val))
     return log_cosh_sum / len(results)
         
 
