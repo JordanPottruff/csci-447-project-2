@@ -172,7 +172,20 @@ def run_knn(data_set, k):
     print()
 
 
+def test_knn(data_set, k):
+    knn = k_nn.KNN(data_set, k)
 
+    results = []
+    total = len(data_set.data) // 2
+    count = 0
+    for obs in data_set.data[:total]:
+        results.append({"expected": obs[data_set.class_col], "actual": knn.run(obs)})
+        if count % 100 == 0:
+            print(str(count*100 / total) + "%...")
+        count += 1
+
+    print("Test KNN")
+    print("Accuracy: " + str(loss.calc_accuracy(results)))
 
 
 
@@ -194,8 +207,9 @@ def main():
     # km = kmeans.KMeans(machine_data, 2)
     # print(km.centroids)
 
+    test_knn(car_data, 10)
     # Run knn algorithm
-    run_knn(segmentation_data, 3)
+    # run_knn(segmentation_data, 3)
     # test = ['M', -0.008889999551080878, -0.0066865341554053145, -0.016469578343283654, -0.00993193661287392,
     #         -0.009402569219692621, -0.011236496693245597, -0.00987497614459177, '15']
     # knn = k_nn.KNN(abalone_data, 9)
