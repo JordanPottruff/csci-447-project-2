@@ -1,5 +1,5 @@
-from algorithms.knn import KNN  # change to src.algorithms.knn
-from datasets.data_set import DataSet
+from src.algorithms.knn import KNN  # change to src.algorithms.knn
+from src.datasets.data_set import DataSet
 import random
 
 

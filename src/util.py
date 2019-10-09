@@ -1,5 +1,6 @@
 # Here we can store functions that are useful across all algorithms.
 import csv
+import operator as op
 
 
 # Calculates the class distribution of a 2D list of data. The distribution is stored in a dictionary that maps each
@@ -18,6 +19,11 @@ def calculate_class_distribution(data, class_col):
         else:
             probs[class_val] = 1 / n
     return probs
+
+
+# This function takes in a probability distribution, outputs the class corresponding to the maximum probability
+def get_highest_class(classes:dict) -> str:
+    return max(classes.items(), key=op.itemgetter(1))[0]
 
 
 # Creates a 2D list from a file.

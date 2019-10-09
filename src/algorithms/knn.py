@@ -35,11 +35,14 @@ class KNN:
         # Lastly, we want k_smallest to only store the examples themselves, no distances.
         for i in range(len(k_smallest)):
             k_smallest[i] = k_smallest[i][1]
+
         return k_smallest
 
+    # Input an example test, output probability map of class
     def run(self, example):
         k_closest = self.find_closest_neighbors(example)
-        return util.calculate_class_distribution(k_closest, self.training_data.class_col)
+        probability = util.calculate_class_distribution(k_closest, self.training_data.class_col)
+        return probability
 
 
 
