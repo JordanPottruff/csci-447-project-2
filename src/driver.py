@@ -81,6 +81,7 @@ def run_regression(alg_class, data_set, k_values):
         print(" * Results: ")
         print("   - Avg mean squared error = " + str(avg_mse))
         print("   - Avg los cosh loss = " + str(avg_los_cosh_loss))
+        print()
 
 
 def main():
