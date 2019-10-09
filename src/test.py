@@ -47,7 +47,15 @@ def test_knn():
 
 
 def main():
-    test_pam()
+    data = get_three_clusters_data()
+    for fold in data.validation_folds(10):
+        for row in fold['train'].data:
+            print(row)
+        for row in fold['test'].data:
+            print(row)
+        print()
+        print()
+    #test_pam()
 
 
 main()

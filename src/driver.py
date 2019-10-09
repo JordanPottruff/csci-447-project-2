@@ -272,7 +272,8 @@ def main():
     segmentation_data = get_segmentation_data()
     wine_data = get_wine_data()
 
-    run_pam(car_data, 5)
+    run_pam(segmentation_data, 5)
+    # run_knn(car_data, 5)
 
 
 

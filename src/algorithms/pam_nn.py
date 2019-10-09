@@ -20,19 +20,13 @@ class PamNN:
         while last_medoids is None or medoids != last_medoids:
             last_medoids = medoids.copy()
             # Reset the clusters to have 0 observations.
-            clusters = [[] for i in range(self.k)]
-
-            # Assign each observation to the cluster corresponding to the closest medoid.
-            for obs in self.training_data.get_data():
-                # We do not want to assign the examples used as medoids into the clusters.
-                if obs not in medoids:
-                    closest_centroid_i = self.find_closest_medoid(obs, medoids)
-                    clusters[closest_centroid_i].append(obs)
+            clusters = self.assign_clusters(self.training_data.data, medoids)
 
             # We maintain the initial distortion for comparison later.
             # *OPTIMIZATION*: we segment distortion by calculating the distortion within each cluster. This way, we only
             # need to recalculate distortion for the clusters that change.
-            distortions = [self.calculate_distortion([clusters[i]], [medoids[i]]) for i in range(self.k)]
+            min_distortion = self.calculate_distortion(clusters, medoids)
+            best_swap = None
             # We select a medoid (by index)
             for medoid_i in range(self.k):
                 # We then select a cluster (by index) to look through.
@@ -51,16 +45,22 @@ class PamNN:
                         medoids[medoid_i] = x
                         cluster[i] = m
                         # Now calculate the new distortion resulting from the swap...
-                        new_distortions = distortions.copy()
-                        # ...first by updating the cluster that the selected medoid belongs to...
-                        new_distortions[medoid_i] = self.calculate_distortion([clusters[medoid_i]], [x])
-                        # ...and then by updating the cluster that the selected observation belongs to.
-                        new_distortions[cluster_i] = self.calculate_distortion([cluster], [medoids[cluster_i]])
-                        # We can sum these two lists to find the total distortion, and we will swap the selected medoid
-                        # and observation back if the original swap did not result in a lower distortion.
-                        if sum(distortions) <= sum(new_distortions):
-                            medoids[medoid_i] = m
-                            cluster[i] = x
+                        new_distortion = self.calculate_distortion(clusters, medoids)
+                        # We now check if this swap results in a lower distortion than our best previous swap. If so, we
+                        # record it.
+                        if min_distortion > new_distortion:
+                            min_distortion = new_distortion
+                            best_swap = (medoid_i, (cluster_i, i))
+                        # We now reverse our swap.
+                        medoids[medoid_i] = m
+                        cluster[i] = x
+            if best_swap is not None:
+                m = medoids[best_swap[0]]
+                x = clusters[best_swap[1][0]][best_swap[1][1]]
+                medoids[best_swap[0]] = x
+                clusters[best_swap[1][0]][best_swap[1][1]] = m
+            else:
+                break
         # We will track the distortion of the final clusters:
         final_distortion = self.calculate_distortion(clusters, medoids)
 
@@ -94,6 +94,18 @@ class PamNN:
                 medoid = medoids[cluster_i]
                 distortion += self.training_data.distance(obs, medoid)
         return distortion
+
+    def assign_clusters(self, examples, medoids):
+        # Set each cluster to be empty
+        clusters = [[] for i in range(self.k)]
+
+        # Assign each observation to the cluster corresponding to the closest medoid.
+        for obs in examples:
+            # We do not want to assign the examples used as medoids into the clusters.
+            if obs not in medoids:
+                closest_centroid_i = self.find_closest_medoid(obs, medoids)
+                clusters[closest_centroid_i].append(obs)
+        return clusters
 
     def run(self, example):
         closest_centroid_i = self.find_closest_medoid(example, self.medoids)
