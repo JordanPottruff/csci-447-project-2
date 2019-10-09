@@ -9,7 +9,7 @@ class KNN:
         self.training_data = training_data
         self.k = k
 
-    # Input the example test, output a list of tuples with (distance, class)
+    # Returns a list of training examples that are the k-closest neighbors to the given observation.
     def find_closest_neighbors(self, observation):
         # Initialize k_smallest to be a list of 'None's. After the for loop is finished it should contain k tuples
         # representing the k-nearest neighbors to the observation. The first position is the distance and the second
