@@ -3,6 +3,7 @@
 import src.util as util
 import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
+import src.algorithms.pam_nn as pamnn
 import src.algorithms.knn as knn
 
 THREE_CLUSTERS_DATA_FILE = "../data/test/three_clusters.data"
@@ -11,7 +12,7 @@ def get_three_clusters_data():
     data = util.read_file(THREE_CLUSTERS_DATA_FILE)
     three_clusters_data = ds.DataSet(data, 2, [0,1], THREE_CLUSTERS_DATA_FILE)
     three_clusters_data.convert_to_float([0, 1])
-    three_clusters_data.normalize_z_score([0, 1])
+    #three_clusters_data.normalize_z_score([0, 1])
     return three_clusters_data
 
 
@@ -23,6 +24,15 @@ def test_kmeans():
     print("Clusters from kmeans:")
     for count, cluster_classes in enumerate(km.cluster_classes, 1):
         print(str(count) + ": " + str(cluster_classes))
+
+
+def test_pam():
+    three_clusters_data = get_three_clusters_data()
+
+    pam = pamnn.PamNN(three_clusters_data, 3)
+    print("Clusters from PAM:")
+    for count, cluster_classes in enumerate(pam.cluster_classes, 1):
+        print(str(count) + ": " + str(cluster_classes) + ", " + str(pam.medoids[count-1]))
 
 
 def test_knn():
@@ -37,9 +47,7 @@ def test_knn():
 
 
 def main():
-    pass
-    # test_kmeans()
-    # test_knn()
+    test_pam()
 
 
 main()
