@@ -118,7 +118,7 @@ class DataSet:
             train = []
             for j in range(n):
                 if i != j:
-                    train += sections[i]
+                    train += sections[j]
             folds[i]['train'] = DataSet(train, self.class_col, self.attr_cols)
         return folds
 
