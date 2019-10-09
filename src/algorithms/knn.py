@@ -8,52 +8,38 @@ class KNN:
     def __init__(self, training_data, k):
         self.training_data = training_data
         self.k = k
-        self.distance = []
-    # Input the example test, output a list of tuples with (distance, class)
-    def calc_euclidean_distance(self, test_point):
-        data = self.training_data.get_data()
-        attribute_columns = self.training_data.attr_cols
-        class_columns = self.training_data.class_col
-        for groups in data:
-            # transformed_array = [groups[i] for i in attribute_columns]
-            # test_point = [test_point[i] for i in attribute_columns]
-            self.distance.append((self.training_data.distance(groups, test_point), groups[class_columns]))
-        k_smallest = self.find_k_smallest(self.distance, self.k)
-        # print(k_smallest)
-        return k_smallest
 
-    def calc_probability(self, distance_array):
-        classification = []
-        for i in range(len(distance_array)):
-            classification.append((distance_array[i][1]))
-        # print(classification)
-        class_probability = util.count_frequency(classification)
-        class_length = len(classification)
-        for key, value in class_probability.items():
-            class_probability[key] = float(value / class_length)
-        return class_probability
+    # Input the example test, output a list of tuples with (distance, class)
+    def find_closest_neighbors(self, observation):
+        # Initialize k_smallest to be a list of 'None's. After the for loop is finished it should contain k tuples
+        # representing the k-nearest neighbors to the observation. The first position is the distance and the second
+        # position is the example itself.
+        k_smallest = [None for i in range(self.k)]
+        # Stores the index of either (1) the first None value or (2) the largest item if no None's are present.
+        max_index = 0
+        # Iterate across each example in the training data...
+        for example in self.training_data.data:
+            dist = self.training_data.distance(example, observation)
+            # ...filling in any None values in k_smallest or replacing any examples with larger distances.
+            if k_smallest[max_index] is None or k_smallest[max_index][0] > dist:
+                k_smallest[max_index] = (dist, example)
+                # We also need to re-calculate the max_index given the current k_smallest list.
+                for i in range(len(k_smallest)):
+                    # If a None is encountered, always set it as max_index (we want remove all Nones right away)
+                    if k_smallest[i] is None:
+                        max_index = i
+                        break
+                    # Otherwise, try to find the maximum index if there are no None's.
+                    if k_smallest[i][0] < k_smallest[max_index][0]:
+                        max_index = i
+        # Lastly, we want k_smallest to only store the examples themselves, no distances.
+        for i in range(len(k_smallest)):
+            k_smallest[i] = k_smallest[i][1]
+        return k_smallest
 
     def run(self, example):
-        distance = self.calc_euclidean_distance(example)
-        return self.calc_probability(distance)
+        k_closest = self.find_closest_neighbors(example)
+        return util.calculate_class_distribution(k_closest, self.training_data.class_col)
 
-    # TODO(alan): update this function to take in a list of tuples rather than just distances. The tuple should be a
-    #  pair of each observation with its distance. We then find the k-th tuples with the shortest distance.
-    def find_k_smallest(self, distances, k):
-        k_smallest = distances[0:k]
-        largest = max(k_smallest)
-        left_over = distances[k:]
-        for item in left_over:
-            if item < largest:
-                # We find the largest element in k_smallest now...
-                max_index = 0
-                for i in range(k):
-                    if k_smallest[i][0] > k_smallest[max_index][0]:
-                        max_index = i
-                #... and replace that element with the current item.
-                k_smallest[max_index] = item
-                # this can be optimized more by doing it in the previous loop, but for simplicity we can just use min.
-                largest = max(k_smallest)
-        return k_smallest
 
 

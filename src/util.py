@@ -30,6 +30,7 @@ def read_file(filename):
             empty_removed.append(line)
     return empty_removed
 
+
 def count_frequency(data):
         freq = {}
         for item in data:

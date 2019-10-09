@@ -207,9 +207,9 @@ def main():
     # km = kmeans.KMeans(machine_data, 2)
     # print(km.centroids)
 
-    test_knn(car_data, 10)
+    # test_knn(abalone_data, 50)
     # Run knn algorithm
-    # run_knn(segmentation_data, 3)
+    run_knn(car_data, 20)
     # test = ['M', -0.008889999551080878, -0.0066865341554053145, -0.016469578343283654, -0.00993193661287392,
     #         -0.009402569219692621, -0.011236496693245597, -0.00987497614459177, '15']
     # knn = k_nn.KNN(abalone_data, 9)
