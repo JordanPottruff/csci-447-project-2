@@ -15,9 +15,9 @@ class KNN:
         attribute_columns = self.training_data.attr_cols
         class_columns = self.training_data.class_col
         for groups in data:
-            transformed_array = [groups[i] for i in attribute_columns]
-            test_point = [test_point[i] for i in attribute_columns]
-            self.distance.append((self.training_data.distance(transformed_array, test_point), groups[class_columns]))
+            # transformed_array = [groups[i] for i in attribute_columns]
+            # test_point = [test_point[i] for i in attribute_columns]
+            self.distance.append((self.training_data.distance(groups, test_point), groups[class_columns]))
         k_smallest = self.find_k_smallest(self.distance, self.k)
         # print(k_smallest)
         return k_smallest
@@ -27,7 +27,7 @@ class KNN:
         for i in range(len(distance_array)):
             classification.append((distance_array[i][1]))
         # print(classification)
-        class_probability = util.count_requency(classification)
+        class_probability = util.count_frequency(classification)
         class_length = len(classification)
         for key, value in class_probability.items():
             class_probability[key] = float(value / class_length)
@@ -48,7 +48,7 @@ class KNN:
                 # We find the largest element in k_smallest now...
                 max_index = 0
                 for i in range(k):
-                    if k_smallest[i] > k_smallest[max_index]:
+                    if k_smallest[i][0] > k_smallest[max_index][0]:
                         max_index = i
                 #... and replace that element with the current item.
                 k_smallest[max_index] = item

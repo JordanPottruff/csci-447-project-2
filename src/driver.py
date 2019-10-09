@@ -134,6 +134,7 @@ def run_k_means(data_set, k):
     print(" * avg hinge = " + str(avg_hinge))
     print()
 
+
 def run_knn(data_set, k):
     print("-------")
     print("KNN")
@@ -173,6 +174,8 @@ def run_knn(data_set, k):
 
 
 
+
+
 def main():
     # Open data sets
     abalone_data = get_abalone_data()
@@ -192,7 +195,7 @@ def main():
     # print(km.centroids)
 
     # Run knn algorithm
-    run_knn(abalone_data, 3)
+    run_knn(segmentation_data, 3)
     # test = ['M', -0.008889999551080878, -0.0066865341554053145, -0.016469578343283654, -0.00993193661287392,
     #         -0.009402569219692621, -0.011236496693245597, -0.00987497614459177, '15']
     # knn = k_nn.KNN(abalone_data, 9)
