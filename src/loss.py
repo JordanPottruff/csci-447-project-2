@@ -35,7 +35,7 @@ def calc_log_cosh(results):
     for result in results:
         expected_val = math.log(result['expected']) # Use log to make data difference smaller
         actual_val = math.log(get_expected_value(result['actual'])) # Use log to make data difference smaller
-        10**log_cosh_sum += math.log(math.cosh(expected_val - actual_val))
+        log_cosh_sum += 10**math.log(math.cosh(expected_val - actual_val))
     return log_cosh_sum / len(results)
         
 
