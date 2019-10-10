@@ -40,7 +40,8 @@ class KMeans:
 
             # With all observations assigned to a cluster, we now recalculate the centroids as the cluster means.
             for i in range(self.k):
-                centroids[i] = self.calculate_cluster_mean(clusters[i])
+                if len(clusters[i]) != 0:
+                    centroids[i] = self.calculate_cluster_mean(clusters[i])
 
             # Update distortion variables to determine whether to exit the loop now.
             new_distortion = self.calculate_distortion(clusters, centroids)
