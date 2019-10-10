@@ -57,7 +57,7 @@ def run_regression(alg_class, data_set, k_values):
     for i, k in enumerate(k_values):
         print("[" + str(i+1) + "] k=" + str(k) + " using 10-fold CV")
         avg_mse = 0
-        avg_los_cosh_loss = 0
+        avg_huber_loss = 0
         print(" * Folds Complete: ", end='', flush=True)
         for fold_i, fold in enumerate(folds):
             test = fold['test']
@@ -70,9 +70,9 @@ def run_regression(alg_class, data_set, k_values):
                 results.append(result)
 
             mse = loss.calc_mse(results)
-            log_cosh_loss = loss.calc_log_cosh(results)
+            huber_loss = loss.calc_huber_loss(results)
             avg_mse += mse / len(folds)
-            avg_los_cosh_loss += log_cosh_loss / len(folds)
+            avg_huber_loss += huber_loss / len(folds)
             print(fold_i + 1, end='', flush=True)
             if fold_i == len(folds) - 1:
                 print()
@@ -80,7 +80,7 @@ def run_regression(alg_class, data_set, k_values):
                 print(", ", end='', flush=True)
         print(" * Results: ")
         print("   - Avg mean squared error = " + str(avg_mse))
-        print("   - Avg los cosh loss = " + str(avg_los_cosh_loss))
+        print("   - Avg huber loss = " + str(avg_huber_loss))
         print()
 
 
@@ -95,9 +95,9 @@ def main():
     wine_data = ds.get_wine_data()
 
     # Classification analysis:
-    run_classification(k_nn.KNN, abalone_data, [10, 30, 50])
-    run_classification(k_nn.KNN, car_data, [10, 30, 50])
-    run_classification(k_nn.KNN, segmentation_data, [10, 30, 50])
+    # run_classification(k_nn.KNN, abalone_data, [10, 30, 50])
+    # run_classification(k_nn.KNN, car_data, [10, 30, 50])
+    # run_classification(k_nn.KNN, segmentation_data, [10, 30, 50])
 
     # Regression analysis:
     run_regression(k_nn.KNN, machine_data, [5, 10, 15])
