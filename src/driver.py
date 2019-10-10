@@ -218,8 +218,8 @@ def main():
     accuracy_cknn = create_chart_data("Condensed KNN", ["abalone", "car", "image"], [cknn_abalone, cknn_car, cknn_image], "Accuracy", 0)
     hinge_cknn = create_chart_data("Condensed KNN", ["abalone", "car", "image"], [cknn_abalone, cknn_car, cknn_image], "Hinge Loss", 1)
 
-    classification_clusters = {"abalone": eknn_abalone["data-sizes"], "car": eknn_car["data-sizes"], "image": eknn_image["data-sizes"]}
-    regression_clusters = {"forest fires": len(forest_fires_data.data) / 4, "machine": len(machine_data.data) / 4, "wine": len(wine_data.data) / 4}
+    classification_clusters = {"abalone": int(eknn_abalone["data-sizes"]), "car": int(eknn_car["data-sizes"]), "image": int(eknn_image["data-sizes"])}
+    regression_clusters = {"forest fires": int(len(forest_fires_data.data) / 4), "machine": int(len(machine_data.data) / 4), "wine": int(len(wine_data.data) / 4)}
 
     # CLUSTER ESTIMATES
     print("Cluster estimates: ")
@@ -248,7 +248,7 @@ def main():
     accuracy_pam = create_chart_data("K-Means", ["abalone", "car", "image"], [pam_abalone, pam_car, pam_image], "Accuracy", 0)
     hinge_pam = create_chart_data("K-Means", ["abalone", "car", "image"], [pam_abalone, pam_car, pam_image], "Hinge Loss", 1)
 
-    # K-Means - Regression
+    # PAM - Regression
     pam_fires = run_regression(pamnn.PamNN, forest_fires_data, regression_clusters["forest fires"])
     pam_machine = run_regression(pamnn.PamNN, machine_data, regression_clusters["machine"])
     pam_wine = run_regression(pamnn.PamNN, wine_data, regression_clusters["wine"])
