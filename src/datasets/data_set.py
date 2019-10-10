@@ -177,7 +177,7 @@ def get_forest_fires_data():
     # Convert applicable columns to floats, including the class column.
     forest_fires_data.convert_to_float([0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12])
     # Normalize values.
-    forest_fires_data.normalize_z_score([0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    forest_fires_data.normalize_z_score([0, 1, 4, 5, 6, 7, 8, 9, 10, 11])
     # Randomly shuffle values.
     forest_fires_data.shuffle()
     return forest_fires_data
@@ -190,7 +190,7 @@ def get_machine_data():
     # Convert all columns except the first two to floats, including the class column.
     machine_data.convert_to_float(list(range(2, 9)))
     # Normalize values.
-    machine_data.normalize_z_score(list(range(2, 9)))
+    machine_data.normalize_z_score(list(range(2, 8)))
     # Randomly shuffle values.
     machine_data.shuffle()
     return machine_data
@@ -220,7 +220,7 @@ def get_wine_data():
     # Convert all attribute columns to numeric values.
     wine_data.convert_to_float(list(range(0, 12)))
     # Normalize values.
-    wine_data.normalize_z_score(list(range(0, 12)))
+    wine_data.normalize_z_score(list(range(0, 11)))
     # Randomly shuffle values.
     wine_data.shuffle()
     return wine_data

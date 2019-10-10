@@ -1,5 +1,6 @@
 import math
 
+
 def calc_accuracy(results):
     correct = 0
     for result in results:
@@ -26,43 +27,47 @@ def calc_hinge(results):
             hinge_sum += max(0, actual_classes[cls] - expected_cls_prob + 1)
     return hinge_sum / len(results)
 
-# def calc_log_cosh(results):
-#     """Loss function that is used for regression and is the logarithm of the hyperbolic cosine of the prediciton error"""
-#     # Works similar to mean squared error but will not be sensitive to a incorrect predictions
-#     # REFERENCED: https://heartbeat.fritz.ai/5-regression-loss-functions-all-machine-learners-should-know-4fb140e9d4b0
-#     log_cosh_sum = 0
-#     # For each result generated from test set
-#     for result in results:
-#         expected_val = result['expected'] # Use log to make data difference smaller
-#         actual_val = get_expected_value(result['actual']) # Use log to make data difference smaller
-#         print("Value we are about to COSH: " + str(expected_val - actual_val))
-#         print("COSH of Expected_VAL - Actual VAL: " + str(math.log(abs(math.cosh(expected_val - actual_val)))))
-#         log_cosh_sum += math.log(abs(math.cosh(expected_val - actual_val)))
-#     return log_cosh_sum / len(results)
 
+# Loss function that is more resilient to large residuals than straight forward mean square error.
 def calc_huber_loss(results):
-    """Loss function that is used for regression and is the logarithm of the hyperbolic cosine of the prediciton error"""
-    # Describes penalty incurred by an estimation procedure f
     huber_loss_sum = 0
     # For each result generated from test set
+    mean, sd = calc_distribution(results)
     for result in results:
         expected_val = result['expected'] # Use log to make data difference smaller
+        expected_z_score = (expected_val - mean) / sd
         actual_val = get_expected_value(result['actual']) # Use log to make data difference smaller
-        hyper_param = .9
-        if actual_val - expected_val <= hyper_param:
+        actual_z_score = (actual_val - mean) / sd
+
+        # If the values are more than one standard deviation apart, use MAE. Otherwise, MSE.
+        hyper_param = 1
+        if abs(actual_z_score - expected_z_score) <= hyper_param:
             huber_loss_sum += (actual_val - expected_val)**2
         else:
             huber_loss_sum += abs(actual_val - expected_val)
     return huber_loss_sum / len(results)
         
 
-def calc_mse(results):
-    mse_sum = 0
+def calc_distribution(results):
+    mean = 0
+    for result in results:
+        mean += result['expected'] / len(results)
+
+    standard_deviation = 0
+    for result in results:
+        standard_deviation = ((result['expected'] - mean)**2) / len(results)
+    standard_deviation = math.sqrt(standard_deviation)
+
+    return mean, standard_deviation
+
+
+def calc_rmse(results):
+    rmse_sum = 0
     for result in results:
         expected_val = result['expected']
         actual_val = get_expected_value(result['actual'])
-        mse_sum += (expected_val - actual_val)**2
-    return mse_sum / len(results)
+        rmse_sum += (expected_val - actual_val)**2
+    return math.sqrt(rmse_sum / len(results))
 
 
 def get_expected_value(distribution):

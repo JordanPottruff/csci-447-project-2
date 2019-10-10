@@ -56,7 +56,7 @@ def run_regression(alg_class, data_set, k_values):
     folds = data_set.validation_folds(10)
     for i, k in enumerate(k_values):
         print("[" + str(i+1) + "] k=" + str(k) + " using 10-fold CV")
-        avg_mse = 0
+        avg_rmse = 0
         avg_huber_loss = 0
         print(" * Folds Complete: ", end='', flush=True)
         for fold_i, fold in enumerate(folds):
@@ -69,9 +69,9 @@ def run_regression(alg_class, data_set, k_values):
                 result = {"expected": obs[data_set.class_col], "actual": alg.run(obs)}
                 results.append(result)
 
-            mse = loss.calc_mse(results)
+            rmse = loss.calc_rmse(results)
             huber_loss = loss.calc_huber_loss(results)
-            avg_mse += mse / len(folds)
+            avg_rmse += rmse / len(folds)
             avg_huber_loss += huber_loss / len(folds)
             print(fold_i + 1, end='', flush=True)
             if fold_i == len(folds) - 1:
@@ -79,7 +79,7 @@ def run_regression(alg_class, data_set, k_values):
             else:
                 print(", ", end='', flush=True)
         print(" * Results: ")
-        print("   - Avg mean squared error = " + str(avg_mse))
+        print("   - Avg root mean squared error = " + str(avg_rmse))
         print("   - Avg huber loss = " + str(avg_huber_loss))
         print()
 
