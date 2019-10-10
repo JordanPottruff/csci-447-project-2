@@ -92,6 +92,49 @@ def run_regression(alg_class, data_set, k_values):
         huber_losses.append(avg_huber_loss)
     return k_values, rmse_losses, huber_losses
 
+# def compare_accuracy_table(dataset_accuracies):
+#     """Generates a table comparing the accuracies for each data set. Parameter input is a dictionary"""
+#     labels = []
+#
+#     label_locations = np.arange(len(dataset_accuracies))  # returns evenly spaced values
+#     width_of_bars = .6/len(dataset_accuracies)
+#
+#     fig, ax = plt.subplots()
+#
+#     # We have our label and accuracy
+#     bars = []
+#     location = 0
+#     for dataset, accuracy in dataset_accuracies.items():
+#         # Get labels for bars
+#         labels.append(dataset)
+#         # Get bars (Location, height, width, label for legend)
+#         bars.append(ax.bar(location, accuracy, width_of_bars, label=dataset, align='center'))
+#         location += 1
+#
+#     # Add test for labels, title, and custom x-xis tick labels
+#     ax.set_title("Accuracies of Datasets")
+#     ax.set_ylabel("Accuracy %")
+#     ax.set_xticks(label_locations)
+#     ax.set_xticklabels(labels)
+#     ax.legend()
+#
+#     def autolabel(bars):
+#         """Attach a text label above each bar in *rects*, displaying its height."""
+#         for bar in bars:
+#             height = bar.get_height()
+#             #print(height)
+#             ax.annotate('{}'.format(height),
+#                         xy=(bar.get_x() + bar.get_width() / 2, height),
+#                         xytext=(0, 3),  # 3 points vertical offset
+#                         textcoords="offset points",
+#                         ha='center', va='bottom')
+#     print(len(bars))
+#     for i in range(0, len(bars)-1):
+#          print(autolabel(bars[i]).get_height())
+#          autolabel(bars[i])
+#
+#     fig.tight_layout()
+#     plt.show()
 
 def main():
     # Classification data sets
