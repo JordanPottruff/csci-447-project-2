@@ -176,6 +176,9 @@ def create_chart_data(title, data_set_names, outputs, loss_name, loss_index):
     return data
 
 def main():
+
+
+
     # Classification data sets
     abalone_data = ds.get_abalone_data()
     car_data = ds.get_car_data()

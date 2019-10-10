@@ -33,9 +33,11 @@ class KNN:
                     if k_smallest[i][0] < k_smallest[max_index][0]:
                         max_index = i
         # Lastly, we want k_smallest to only store the examples themselves, no distances.
+        k_smallest_examples = []
         for i in range(len(k_smallest)):
-            k_smallest[i] = k_smallest[i][1]
-        return k_smallest
+            if k_smallest[i] is not None:
+                k_smallest_examples.append(k_smallest[i][1])
+        return k_smallest_examples
 
     # Input an example test, output probability map of class
     def run(self, example):

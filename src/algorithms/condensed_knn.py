@@ -19,7 +19,7 @@ class CondensedKNN(KNN):
             # If not initializing the condensed data set
             if len(condensed_training_set) > 0:
                 # Calculate the closest prototype given which parameter we are looking at
-                closest_prototype = self.calculate_closest_prototype(example)
+                closest_prototype = self.calculate_closest_prototype(example, condensed_training_set)
                 # If the element we are looking at is classified equivalently to the closest prototype then we ignore
                 if example[original_data.class_col] == closest_prototype[original_data.class_col]:
                     continue
@@ -32,15 +32,15 @@ class CondensedKNN(KNN):
         condensed_data = DataSet(condensed_training_set, original_data.class_col, original_data.attr_cols)
         return condensed_data
     
-    def calculate_closest_prototype(self, noncondensed_ele):
+    def calculate_closest_prototype(self, noncondensed_ele, condensed_training_set):
         """Finds the closest prototype to this element"""
         
-        min_dist_prototype = self.training_data.distance(noncondensed_ele, self.condensed_training_set[0])  # Initialize min distance
-        closest_prototype = self.condensed_training_set[0]
+        min_dist_prototype = self.training_data.distance(noncondensed_ele, condensed_training_set[0])  # Initialize min distance
+        closest_prototype = condensed_training_set[0]
         # Loop through condensed training set to find the closest prototype
-        for j in range(1, len(self.condensed_training_set) - 1):
-                    distance = self.training_data.distance(noncondensed_ele, self.condensed_training_set[j])
+        for j in range(1, len(condensed_training_set) - 1):
+                    distance = self.training_data.distance(noncondensed_ele, condensed_training_set[j])
                     if distance < min_dist_prototype:
                         min_dist_prototype = distance
-                        closest_prototype = self.condensed_training_set[j]
+                        closest_prototype = condensed_training_set[j]
         return closest_prototype    
