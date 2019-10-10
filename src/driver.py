@@ -96,13 +96,19 @@ def main():
 
     # Classification analysis:
     run_classification(k_nn.KNN, abalone_data, [10, 30, 50])
-    run_classification(k_nn.KNN, car_data, [10, 30, 50])
-    run_classification(k_nn.KNN, segmentation_data, [10, 30, 50])
+    # run_classification(k_nn.KNN, car_data, [10, 30, 50])
+    # run_classification(k_nn.KNN, segmentation_data, [10, 30, 50])
 
     # Regression analysis:
-    run_regression(k_nn.KNN, machine_data, [5, 10, 15])
-    run_regression(k_nn.KNN, forest_fires_data, [5, 10, 15])
-    run_regression(k_nn.KNN, wine_data, [5, 10, 15])
+    # run_regression(k_nn.KNN, machine_data, [5, 10, 15])
+    # run_regression(k_nn.KNN, forest_fires_data, [5, 10, 15])
+    # run_regression(k_nn.KNN, wine_data, [5, 10, 15])
+    #knn = k_nn.KNN(car_data, 3)
+
+
+
+
+
 
 
 main()
