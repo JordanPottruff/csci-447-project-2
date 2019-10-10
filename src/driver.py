@@ -16,6 +16,8 @@ def run_classification(alg_class, data_set, k_values):
     print(" * N = " + str(len(data_set.data)))
 
     folds = data_set.validation_folds(10)
+    accuracies = []
+    hinge_losses = []
     for i, k in enumerate(k_values):
         print("[" + str(i+1) + "] k=" + str(k) + " using 10-fold CV")
         avg_accuracy = 0
@@ -40,11 +42,13 @@ def run_classification(alg_class, data_set, k_values):
                 print()
             else:
                 print(", ", end='', flush=True)
-
+            accuracies.append(accuracy)
+            hinge_losses.append(hinge_loss)
         print(" * Results: ")
         print("   - Avg accuracy = " + str(avg_accuracy))
         print("   - Avg hinge loss = " + str(avg_hinge_loss))
         print()
+    return k_values, accuracies, hinge_losses
 
 
 def run_regression(alg_class, data_set, k_values):
@@ -54,6 +58,8 @@ def run_regression(alg_class, data_set, k_values):
     print(" * N = " + str(len(data_set.data)))
 
     folds = data_set.validation_folds(10)
+    rmse_losses = []
+    huber_losses = []
     for i, k in enumerate(k_values):
         print("[" + str(i+1) + "] k=" + str(k) + " using 10-fold CV")
         avg_rmse = 0
@@ -82,6 +88,9 @@ def run_regression(alg_class, data_set, k_values):
         print("   - Avg root mean squared error = " + str(avg_rmse))
         print("   - Avg huber loss = " + str(avg_huber_loss))
         print()
+        rmse_losses.append(avg_rmse)
+        huber_losses.append(avg_huber_loss)
+    return k_values, rmse_losses, huber_losses
 
 
 def main():
@@ -95,14 +104,13 @@ def main():
     wine_data = ds.get_wine_data()
 
     # Classification analysis:
-    # run_classification(k_nn.KNN, abalone_data, [10, 30, 50])
-    # run_classification(k_nn.KNN, car_data, [10, 30, 50])
-    # run_classification(k_nn.KNN, segmentation_data, [10, 30, 50])
+    knn_abalone_out = run_classification(k_nn.KNN, abalone_data, [10, 30, 50])
+    knn_car_out = run_classification(k_nn.KNN, car_data, [10, 30, 50])
+    knn_segmentation_out = run_classification(k_nn.KNN, segmentation_data, [10, 30, 50])
 
     # Regression analysis:
-    run_regression(k_nn.KNN, machine_data, [5, 10, 15])
-    run_regression(k_nn.KNN, forest_fires_data, [5, 10, 15])
-    run_regression(k_nn.KNN, wine_data, [5, 10, 15])
-
+    knn_machine_out = run_regression(k_nn.KNN, machine_data, [5, 10, 15])
+    knn_forest_fire_out = run_regression(k_nn.KNN, forest_fires_data, [5, 10, 15])
+    knn_wine_out = run_regression(k_nn.KNN, wine_data, [5, 10, 15])
 
 main()
