@@ -5,7 +5,7 @@ import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
 import src.algorithms.pam_nn as pamnn
 import src.algorithms.knn as k_nn
-import src.algorithms.edited_knn as e_nn
+import src.algorithms.edited_knn as e_knn
 import src.algorithms.condensed_knn as ck_nn
 
 
@@ -146,10 +146,12 @@ def main():
     machine_data = ds.get_machine_data()
     wine_data = ds.get_wine_data()
 
+    # TODO: Add Eknn and Cknn
+
     # Classification analysis:
-    knn_abalone_out = run_classification(k_nn.KNN, abalone_data, [10, 30, 50])
-    knn_car_out = run_classification(k_nn.KNN, car_data, [10, 30, 50])
-    knn_segmentation_out = run_classification(k_nn.KNN, segmentation_data, [10, 30, 50])
+    # knn_abalone_out = run_classification(k_nn.KNN, abalone_data, [10, 30, 50])
+    # knn_car_out = run_classification(k_nn.KNN, car_data, [10, 30, 50])
+    knn_segmentation_out = run_classification(kmeans.KMeans, segmentation_data, [10, 30, 50])
 
     # Regression analysis:
     knn_machine_out = run_regression(k_nn.KNN, machine_data, [5, 10, 15])
