@@ -188,40 +188,37 @@ def main():
     k_values = [5, 25, 50]
 
     # KNN - Classification
-    # knn_abalone = run_classification(k_nn.KNN, abalone_data, k_values)
-    # knn_car = run_classification(k_nn.KNN, car_data, k_values)
-    # knn_image = run_classification(k_nn.KNN, segmentation_data, k_values)
-
-    # accuracy_knn = create_chart_data("KNN", ["abalone", "car", "image"], [knn_abalone, knn_car, knn_image], "Accuracy", 0)
-    # hinge_knn = create_chart_data("KNN", ["abalone", "car", "image"], [knn_abalone, knn_car, knn_image], "Hinge Loss", 1)
+    knn_abalone = run_classification(k_nn.KNN, abalone_data, k_values)
+    knn_car = run_classification(k_nn.KNN, car_data, k_values)
+    knn_image = run_classification(k_nn.KNN, segmentation_data, k_values)
+    accuracy_knn = create_chart_data("KNN", ["abalone", "car", "image"], [knn_abalone, knn_car, knn_image], "Accuracy", 0)
+    hinge_knn = create_chart_data("KNN", ["abalone", "car", "image"], [knn_abalone, knn_car, knn_image], "Hinge Loss", 1)
 
     # KNN - Regression
-    # knn_fires = run_classification(k_nn.KNN, forest_fires_data, k_values)
-    # knn_machine = run_classification(k_nn.KNN, machine_data, k_values)
-    # knn_wine = run_classification(k_nn.KNN, wine_data, k_values)
-
-    # rmse_knn = create_chart_data("KNN", ["forest fires", "machine", "wine"], [knn_fires, knn_machine, knn_wine], "RMSE", 0)
-    # huber_knn = create_chart_data("KNN", ["forest fires", "machine", "wine"], [knn_fires, knn_machine, knn_wine], "Huber Loss", 0)
+    knn_fires = run_regression(k_nn.KNN, forest_fires_data, k_values)
+    knn_machine = run_regression(k_nn.KNN, machine_data, k_values)
+    knn_wine = run_regression(k_nn.KNN, wine_data, k_values)
+    rmse_knn = create_chart_data("KNN", ["forest fires", "machine", "wine"], [knn_fires, knn_machine, knn_wine], "RMSE", 0)
+    huber_knn = create_chart_data("KNN", ["forest fires", "machine", "wine"], [knn_fires, knn_machine, knn_wine], "Huber Loss", 0)
 
     # Edited KNN - Classification
     eknn_abalone = run_classification(e_knn.EditedKNN, abalone_data, k_values)
     eknn_car = run_classification(e_knn.EditedKNN, car_data, k_values)
     eknn_image = run_classification(e_knn.EditedKNN, segmentation_data, k_values)
-
     accuracy_eknn = create_chart_data("Edited KNN", ["abalone", "car", "image"], [eknn_abalone, eknn_car, eknn_image], "Accuracy", 0)
     hinge_eknn = create_chart_data("Edited KNN", ["abalone", "car", "image"], [eknn_abalone, eknn_car, eknn_image], "Hinge Loss", 1)
 
     # Condensed KNN - Classification
-    # cknn_abalone = run_classification(c_knn.CondensedKNN, abalone_data, k_values)
-    # cknn_car = run_classification(c_knn.CondensedKNN, car_data, k_values)
-    # cknn_image = run_classification(c_knn.CondensedKNN, segmentation_data, k_values)
-
-    # accuracy_cknn = create_chart_data("Condensed KNN", ["abalone", "car", "image"], [cknn_abalone, cknn_car, cknn_image], "Accuracy", 0)
-    # hinge_cknn = create_chart_data("Condensed KNN", ["abalone", "car", "image"], [cknn_abalone, cknn_car, cknn_image], "Hinge Loss", 1)
+    cknn_abalone = run_classification(c_knn.CondensedKNN, abalone_data, k_values)
+    cknn_car = run_classification(c_knn.CondensedKNN, car_data, k_values)
+    cknn_image = run_classification(c_knn.CondensedKNN, segmentation_data, k_values)
+    accuracy_cknn = create_chart_data("Condensed KNN", ["abalone", "car", "image"], [cknn_abalone, cknn_car, cknn_image], "Accuracy", 0)
+    hinge_cknn = create_chart_data("Condensed KNN", ["abalone", "car", "image"], [cknn_abalone, cknn_car, cknn_image], "Hinge Loss", 1)
 
     classification_clusters = {"abalone": eknn_abalone["data-sizes"], "car": eknn_car["data-sizes"], "image": eknn_image["data-sizes"]}
     regression_clusters = {"forest fires": len(forest_fires_data.data) / 4, "machine": len(machine_data.data) / 4, "wine": len(wine_data.data) / 4}
 
+    # CLUSTER ESTIMATES
     print("Cluster estimates: ")
     print(classification_clusters)
     print(regression_clusters)
@@ -231,31 +228,47 @@ def main():
     kmeans_abalone = run_classification(kmeans.KMeans, abalone_data, classification_clusters["abalone"])
     kmeans_car = run_classification(kmeans.KMeans, car_data, classification_clusters["car"])
     kmeans_image = run_classification(kmeans.KMeans, segmentation_data, classification_clusters["image"])
-
     accuracy_kmeans = create_chart_data("K-Means", ["abalone", "car", "image"], [kmeans_abalone, kmeans_car, kmeans_image], "Accuracy", 0)
     hinge_kmeans = create_chart_data("K-Means", ["abalone", "car", "image"], [kmeans_abalone, kmeans_car, kmeans_image], "Hinge Loss", 1)
 
     # K-Means - Regression
-    kmeans_fires = run_classification(kmeans.KMeans, forest_fires_data, regression_clusters["forest fires"])
-    kmeans_machine = run_classification(kmeans.KMeans, machine_data, regression_clusters["machine"])
-    kmeans_wine = run_classification(kmeans.KMeans, wine_data, regression_clusters["wine"])
-
+    kmeans_fires = run_regression(kmeans.KMeans, forest_fires_data, regression_clusters["forest fires"])
+    kmeans_machine = run_regression(kmeans.KMeans, machine_data, regression_clusters["machine"])
+    kmeans_wine = run_regression(kmeans.KMeans, wine_data, regression_clusters["wine"])
     rmse_kmeans = create_chart_data("K-Means", ["forest fires", "machine", "wine"], [kmeans_fires, kmeans_machine, kmeans_wine], "RMSE", 0)
     huber_kmeans = create_chart_data("K-Means", ["forest fires", "machine", "wine"], [kmeans_fires, kmeans_machine, kmeans_wine], "Huber Loss", 0)
 
+    # PAM - Classification
+    pam_abalone = run_classification(pamnn.PamNN, abalone_data, classification_clusters["abalone"])
+    pam_car = run_classification(pamnn.PamNN, car_data, classification_clusters["car"])
+    pam_image = run_classification(pamnn.PamNN, segmentation_data, classification_clusters["image"])
+    accuracy_pam = create_chart_data("K-Means", ["abalone", "car", "image"], [pam_abalone, pam_car, pam_image], "Accuracy", 0)
+    hinge_pam = create_chart_data("K-Means", ["abalone", "car", "image"], [pam_abalone, pam_car, pam_image], "Hinge Loss", 1)
+
+    # K-Means - Regression
+    pam_fires = run_regression(pamnn.PamNN, forest_fires_data, regression_clusters["forest fires"])
+    pam_machine = run_regression(pamnn.PamNN, machine_data, regression_clusters["machine"])
+    pam_wine = run_regression(pamnn.PamNN, wine_data, regression_clusters["wine"])
+    rmse_pam = create_chart_data("PAM-NN", ["forest fires", "machine", "wine"], [pam_fires, pam_machine, pam_wine], "RMSE", 0)
+    huber_pam = create_chart_data("PAM-NN", ["forest fires", "machine", "wine"], [pam_fires, pam_machine, pam_wine], "Huber Loss", 0)
+
     # Chart creation
-    # create_metric_chart(accuracy_knn)
-    # create_metric_chart(hinge_knn)
-    # create_metric_chart(rmse_knn)
-    # create_metric_chart(huber_knn)
+    create_metric_chart(accuracy_knn)
+    create_metric_chart(hinge_knn)
+    create_metric_chart(rmse_knn)
+    create_metric_chart(huber_knn)
     create_metric_chart(accuracy_eknn)
     create_metric_chart(hinge_eknn)
-    # create_metric_chart(accuracy_cknn)
-    # create_metric_chart(hinge_cknn)
+    create_metric_chart(accuracy_cknn)
+    create_metric_chart(hinge_cknn)
     create_metric_chart(accuracy_kmeans)
     create_metric_chart(hinge_kmeans)
     create_metric_chart(rmse_kmeans)
     create_metric_chart(huber_kmeans)
+    create_metric_chart(accuracy_pam)
+    create_metric_chart(hinge_pam)
+    create_metric_chart(rmse_pam)
+    create_metric_chart(huber_pam)
 
 
 main()
