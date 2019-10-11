@@ -19,22 +19,15 @@ class EditedKNN(KNN):
     # vectors removed
     def find_edited_data(self):
         while True:
-            previous_training = self.training_data.data.copy()
             previous_accuracy = self.validate_accuracy()
 
-            new_training = []
-            for index, data in enumerate(self.training_data.get_data()):
-                if util.get_highest_class(self.run(data)) == data[self.training_data.class_col]:
-                    self.removed_data_set.append(data)  # Add vector into the removed data list
-                else:
-                    new_training.append(self.training_data.data[index])
+            example = self.training_data.data.pop(0)
+            if util.get_highest_class(self.run(example)) != example[self.training_data.class_col]:
+                self.training_data.data.append(example)
+                continue
 
-            self.training_data.data = new_training
             new_accuracy = self.validate_accuracy()
-
-            if new_accuracy >= previous_accuracy:
-                self.training_data = ds.DataSet(new_training, self.training_data.class_col, self.training_data.attr_cols)
-            else:
+            if new_accuracy < previous_accuracy:
                 break
 
     def validate_accuracy(self):
