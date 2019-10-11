@@ -134,7 +134,6 @@ class DataSet:
 
     # Prints the data set nicely.
     def print(self):
-        print()
         for row in self.data:
             print(row)
         print()

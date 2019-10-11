@@ -7,7 +7,7 @@ class PamNN:
     def __init__(self, training_data, k):
         self.training_data = training_data
         self.k = k
-        self.medoids, self.cluster_classes, self.distortion = self.calculate_medoids(k)
+        self.medoids, self.clusters, self.cluster_classes, self.distortion = self.calculate_medoids(k)
 
     def calculate_medoids(self, k):
         # We randomly choose our medoids to begin.
@@ -69,7 +69,7 @@ class PamNN:
         cluster_classes = [{} for i in range(len(clusters))]
         for i in range(len(clusters)):
             cluster_classes[i] = util.calculate_class_distribution(clusters[i], self.training_data.class_col)
-        return medoids, cluster_classes, final_distortion
+        return medoids, clusters, cluster_classes, final_distortion
 
     # Out of the list of all medoids, this will return the corresponding index for the medoid that is closest to the
     # given observation.

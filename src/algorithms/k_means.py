@@ -15,7 +15,7 @@ class KMeans:
         # centroid for the ith cluster, and cluster_classes[i] is a map of each class to the probability it occurs in
         # the ith cluster. Note that any classes with 0% probabilities (no training data in the cluster had that class)
         # are not included in the dictionary. Lastly, we also store the distortion of the final clusters.
-        self.centroids, self.cluster_classes, self.distortion = self.calculate_clusters()
+        self.centroids, self.clusters, self.cluster_classes, self.distortion = self.calculate_clusters()
 
     # Returns the centroids representing each cluster and the  distribution of classes within each cluster. Both values
     # are lists, where index i in either list represents the ith cluster. The class distributions are in the form of a
@@ -56,7 +56,7 @@ class KMeans:
         for i in range(len(clusters)):
             cluster_classes[i] = util.calculate_class_distribution(clusters[i], self.training_data.class_col)
 
-        return centroids, cluster_classes, distortion
+        return centroids, clusters, cluster_classes, distortion
 
     # Creates a list of centroids that are "random." Returns the centroids as a 2D list.
     def generate_random_centroids(self):

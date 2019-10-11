@@ -8,6 +8,7 @@ class KNN:
     def __init__(self, training_data, k):
         self.training_data = training_data
         self.k = k
+        self.last_nearest_neighbors = None
 
     # Returns a list of training examples that are the k-closest neighbors to the given observation.
     def find_closest_neighbors(self, observation):
@@ -30,8 +31,9 @@ class KNN:
                         max_index = i
                         break
                     # Otherwise, try to find the maximum index if there are no None's.
-                    if k_smallest[i][0] < k_smallest[max_index][0]:
+                    if k_smallest[i][0] > k_smallest[max_index][0]:
                         max_index = i
+        self.last_nearest_neighbors = k_smallest
         # Lastly, we want k_smallest to only store the examples themselves, no distances.
         k_smallest_examples = []
         for i in range(len(k_smallest)):
