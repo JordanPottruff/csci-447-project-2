@@ -8,9 +8,7 @@ import src.loss as loss
 class EditedKNN(KNN):
     def __init__(self, training_data, k):
         super().__init__(training_data, k)
-        partition = training_data.copy().partition(.2)
-        self.validation_data = partition[0]
-        self.training_data = partition[1]
+        self.training_data = training_data.copy()
         self.find_edited_data()
         self.edited_data_size = self.get_edited_data_size()
 
@@ -24,10 +22,10 @@ class EditedKNN(KNN):
                 break
             counter += 1
 
-            prev_accuracy = self.get_validation_accuracy()
+            # prev_accuracy = self.get_validation_accuracy()
             example = self.training_data.data.pop(0)
-            new_accuracy = self.get_validation_accuracy()
-            if prev_accuracy < new_accuracy or util.get_highest_class(self.run(example)) != example[self.training_data.class_col]:
+            # new_accuracy = self.get_validation_accuracy()
+            if util.get_highest_class(self.run(example)) != example[self.training_data.class_col]:
                 self.training_data.data.append(example)
             else:
                 length -= 1
