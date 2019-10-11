@@ -47,14 +47,17 @@ def test_edited_knn():
     print("--------------------------------------------------")
     data = get_three_clusters_data()
 
-    eknn1 = EditedKNN(data, 1)
     print("K-value = 1")
+    print("Reducing training set...")
+    eknn1 = EditedKNN(data, 1)
     print("Reduced training set: ")
     eknn1.training_data.print()
 
-    eknn5 = EditedKNN(data, 5)
     print("K-value = 5")
+    print("Reducing training set...")
+    eknn5 = EditedKNN(data, 5)
     print("Reduced training set: ")
+    print("N = " + str(len(eknn5.training_data.data)))
     eknn5.training_data.print()
     test_point = [5, 5, "A"]
     print("Testing: " + str(test_point))
@@ -73,14 +76,16 @@ def test_condensed_knn():
     print("--------------------------------------------------")
     data = get_three_clusters_data()
 
-    cknn5 = CondensedKNN(data, 3)
     print("K-value = 3")
+    print("Creating reduced training set...")
+    cknn5 = CondensedKNN(data, 3)
     print("Reduced training set: ")
+    print("N = " + str(len(cknn5.training_data.data)))
     cknn5.training_data.print()
     test_point = [5, 5, "A"]
     print("Testing: " + str(test_point))
     print(cknn5.run(test_point))
-    print("5 Nearest Neighbors:")
+    print("3 Nearest Neighbors:")
     for neighbor in cknn5.last_nearest_neighbors:
         if neighbor is not None:
             print(" * {:.2f}".format(neighbor[0]), neighbor[1])
@@ -94,9 +99,9 @@ def test_k_means():
     print("--------------------------------------------------")
     data = get_three_clusters_data()
 
-    kmeans = KMeans(data, 3)
     print("K-value = 3")
-    print("Clusters: ")
+    kmeans = KMeans(data, 3)
+    print("FINAL Clusters: ")
     for i, centroid in enumerate(kmeans.centroids):
         print(" * " + str(centroid))
         for example in kmeans.clusters[i]:
@@ -113,9 +118,9 @@ def test_pam_nn():
     print("--------------------------------------------------")
     data = get_three_clusters_data()
 
-    pam = PamNN(data, 3)
     print("K-value = 3")
-    print("Clusters: ")
+    pam = PamNN(data, 3)
+    print("FINAL Clusters: ")
     for i, medoid in enumerate(pam.medoids):
         print(" * " + str(medoid))
         for example in pam.clusters[i]:

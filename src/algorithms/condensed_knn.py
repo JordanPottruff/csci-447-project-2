@@ -14,20 +14,23 @@ class CondensedKNN(KNN):
         training_list = original_data.get_data().copy()
         random.shuffle(training_list)
 
-        # Loop through the randomized data set
-        for example in training_list:
-            # If not initializing the condensed data set
-            if len(condensed_training_set) > 0:
-                # Calculate the closest prototype given which parameter we are looking at
-                closest_prototype = self.calculate_closest_prototype(example, condensed_training_set)
-                # If the element we are looking at is classified equivalently to the closest prototype then we ignore
-                if example[original_data.class_col] == closest_prototype[original_data.class_col]:
-                    continue
-                else:  # If not equivalent then add prototype
+        prev_training_set = None
+        while prev_training_set is None or len(prev_training_set) != len(condensed_training_set):
+            prev_training_set = condensed_training_set
+            # Loop through the randomized data set
+            for example in training_list:
+                # If not initializing the condensed data set
+                if len(condensed_training_set) > 0:
+                    # Calculate the closest prototype given which parameter we are looking at
+                    closest_prototype = self.calculate_closest_prototype(example, condensed_training_set)
+                    # If the element we are looking at is classified equivalently to the closest prototype then we ignore
+                    if example[original_data.class_col] == closest_prototype[original_data.class_col]:
+                        continue
+                    else:  # If not equivalent then add prototype
+                        condensed_training_set.append(example)
+                else:
+                    # If first one, assume correctly classified and add input
                     condensed_training_set.append(example)
-            else:
-                # If first one, assume correctly classified and add input
-                condensed_training_set.append(example)
 
         condensed_data = DataSet(condensed_training_set, original_data.class_col, original_data.attr_cols)
         return condensed_data
