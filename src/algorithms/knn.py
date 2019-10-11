@@ -1,10 +1,14 @@
-import math
-import src.datasets.data_set as ds
+# knn.py
+# Implementation of the K-nearest neighbor algorithm.
 import src.util as util
 
 
+# The implementation of the K-nearest neighbor algorithm. Given a test example in the "run" method, it will find the k
+# nearest neighbors to that test example found in the training data.
 class KNN:
 
+    # Creates an instance of the algorithm, which requires the training_data and a specific k to evaluate in future
+    # calls to run.
     def __init__(self, training_data, k):
         self.training_data = training_data.copy()
         self.k = k

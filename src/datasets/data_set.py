@@ -1,4 +1,6 @@
-
+# data_set.py
+# Includes a class for defining a DataSet object that can be used in our algorithms. Also includes a few functions for
+# opening the data sets used in our experimental design.
 import random
 import math
 import src.util as util
@@ -10,6 +12,11 @@ MACHINE_DATA_FILE = "../data/machine.data"
 SEGMENTATION_DATA_FILE = "../data/segmentation.data"
 WINE_DATA_FILE = "../data/winequality.data"
 
+
+# The DataSet class encapsulates a simple 2D list of our data (where each row is a data point). On top of this, it
+# includes other meta information such as the class column, attribute columns, and filename. It also provides
+# functionality for doing cross validation, normalization of attributes, replacement of attribute values, and a distance
+# function.
 class DataSet:
 
     # Constructs a new data set object using a filename. In addition, the column of the class and a list of columns of
@@ -23,6 +30,7 @@ class DataSet:
         self.attr_cols = attr_cols
         self.filename = filename
 
+    # Creates a copy of the data set -> prevents issues with mutability.
     def copy(self):
         return DataSet(self.data.copy(), self.class_col, self.attr_cols.copy(), self.filename)
 
@@ -40,7 +48,8 @@ class DataSet:
         return str_attr_cols
 
     # Returns the distance between two observations in the data set. Both a and b are observations that can be from the
-    # data set or a completely new data point in the same format.
+    # data set or a completely new data point in the same format. The distance function is implemented here so that we
+    # can take advantage of the knowledge of attribute columns (both string and non-string).
     def distance(self, a, b):
         str_attr_cols = self.get_str_attr_cols()
         sum = 0
@@ -110,6 +119,8 @@ class DataSet:
         second = DataSet(self.data[cutoff:], self.class_col, self.attr_cols)
         return first, second
 
+    # Creates n-"folds" of our data set, which can be used for cross validation. Each fold has a test set, containing
+    # 1/n of the data, and a training set, containing (n-1)/n of the data. Returns the list of folds.
     def validation_folds(self, n):
         avg_size = len(self.data) / n
         sections = []
@@ -132,6 +143,7 @@ class DataSet:
             folds[i]['train'] = DataSet(train, self.class_col, self.attr_cols)
         return folds
 
+    # Used to randomly sample our data to only be of length k.
     def sample(self, k):
         self.data = random.sample(self.data, k)
 
@@ -142,6 +154,11 @@ class DataSet:
         print()
 
 
+# NOTE:
+# The following functions are meant to handle the preprocessing of the data sets used in our experimental design.
+
+
+# Gets the abalone data set.
 def get_abalone_data():
     data = util.read_file(ABALONE_DATA_FILE)
     abalone_data = DataSet(data, 8, list(range(0, 8)), ABALONE_DATA_FILE)
@@ -155,6 +172,7 @@ def get_abalone_data():
     return abalone_data
 
 
+# Gets the car data set.
 def get_car_data():
     data = util.read_file(CAR_DATA_FILE)
     car_data = DataSet(data, 6, list(range(0, 6)), CAR_DATA_FILE)
@@ -173,6 +191,7 @@ def get_car_data():
     return car_data
 
 
+# Gets the forest fires data set.
 def get_forest_fires_data():
     data = util.read_file(FOREST_FIRE_DATA_FILE)
     forest_fires_data = DataSet(data, 12, list(range(0, 12)), FOREST_FIRE_DATA_FILE)
@@ -202,6 +221,7 @@ def get_machine_data():
     return machine_data
 
 
+# Gets the segmentation data set.
 def get_segmentation_data():
     data = util.read_file(SEGMENTATION_DATA_FILE)
     # Attribute columns are all numeric
@@ -220,6 +240,7 @@ def get_segmentation_data():
     return segmentation_data
 
 
+# Gets the wine data set.
 def get_wine_data():
     data = util.read_file(WINE_DATA_FILE)
     wine_data = DataSet(data, 11, list(range(0, 11)), WINE_DATA_FILE)

@@ -1,4 +1,5 @@
-# Here we can store functions that are useful across all algorithms.
+# util.py
+# These are general utility functions that are useful across all of our algorithms/code.
 import csv
 import operator as op
 
@@ -20,12 +21,10 @@ def calculate_class_distribution(data, class_col):
             probs[class_val] = 1 / n
     return probs
 
-def display_class_distribution(classes):
-    pass
-
-
-# This function takes in a probability distribution, outputs the class corresponding to the maximum probability
+# This function takes in a probability distribution, outputs the class corresponding to the maximum probability. This
+# would essentially return our "guess" for the class of an observation.
 def get_highest_class(classes:dict) -> str:
+    # We find the maximum by searching for the max probability
     return max(classes.items(), key=op.itemgetter(1))[0]
 
 
@@ -40,6 +39,8 @@ def read_file(filename):
     return empty_removed
 
 
+# Counts the frequency of each class in the 2D list of data. Returns a map of each class to a count of the number of
+# times it appears in the data.
 def count_frequency(data):
         freq = {}
         for item in data:

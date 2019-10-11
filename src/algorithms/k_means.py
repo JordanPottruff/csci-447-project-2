@@ -1,4 +1,5 @@
-
+# k_means.py
+# Implementation of the K-Means algorithm for finding clusters.
 import random as rand
 import src.util as util
 
@@ -6,8 +7,12 @@ import src.util as util
 DISTORTION_CHANGE_CUTOFF = 0.001
 
 
+# The K-Means algorithm implementation. This will find the k clusters in the training data and then store the class
+# distribution of the clusters to use for a nearest neighbor search done by 'run'.
 class KMeans:
 
+    # Creates an instance of the algorithm and instantly begins clustering. This way, the run method can be used as
+    # soon as the object is created.
     def __init__(self, training_data, k):
         self.training_data = training_data.copy()
         self.k = k

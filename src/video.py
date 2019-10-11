@@ -1,3 +1,9 @@
+# video.py
+# This is the code we used to demonstrate the functioning of our code on a simple data set. We also expanded it to work
+# with the car data, as shown in the video.
+# FOR EXPERIMENTAL DESIGN, please refer to driver.
+
+
 import src.util as util
 import src.datasets.data_set as ds
 from src.algorithms.knn import KNN
@@ -9,6 +15,7 @@ from src.algorithms.pam_nn import PamNN
 THREE_CLUSTERS_DATA_FILE = "../data/test/three_clusters.data"
 
 
+# Tests the KNN algorithm
 def test_knn():
     print("TESTING KNN")
     print("--------------------------------------------------")
@@ -42,6 +49,7 @@ def test_knn():
     print()
 
 
+# Tests the edited knn algorithm
 def test_edited_knn():
     print("TESTING EDITED KNN")
     print("--------------------------------------------------")
@@ -71,6 +79,7 @@ def test_edited_knn():
     print()
 
 
+# Tests the condensed knn algorithm
 def test_condensed_knn():
     print("TESTING CONDENSED KNN")
     print("--------------------------------------------------")
@@ -113,6 +122,7 @@ def test_k_means():
     print()
 
 
+# Tests the PAM algorithm
 def test_pam_nn():
     print("TESTING PAM-NN")
     print("--------------------------------------------------")
@@ -132,6 +142,7 @@ def test_pam_nn():
     print()
 
 
+# Returns our simplified data set.
 def get_three_clusters_data():
     data = util.read_file(THREE_CLUSTERS_DATA_FILE)
     three_clusters_data = ds.DataSet(data, 2, [0, 1], THREE_CLUSTERS_DATA_FILE)
@@ -140,11 +151,13 @@ def get_three_clusters_data():
     return three_clusters_data
 
 
+# Runs our algorithms on the simplified data set.
 def main():
     test_knn()
     test_edited_knn()
     test_condensed_knn()
     test_k_means()
     test_pam_nn()
+
 
 main()

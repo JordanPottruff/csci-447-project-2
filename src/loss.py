@@ -1,6 +1,6 @@
 import math
 
-
+# Simple accuracy calculation given a list of results
 def calc_accuracy(results):
     correct = 0
     for result in results:
@@ -12,6 +12,7 @@ def calc_accuracy(results):
     return correct / len(results)
 
 
+# Hinge loss calculation given a list of results.
 def calc_hinge(results):
     hinge_sum = 0
     for result in results:
@@ -34,13 +35,14 @@ def calc_huber_loss(results):
     # For each result generated from test set
     mean, sd = calc_distribution(results)
     for result in results:
-        expected_val = result['expected'] # Use log to make data difference smaller
+        expected_val = result['expected']
         expected_z_score = (expected_val - mean) / sd
-        actual_val = get_expected_value(result['actual']) # Use log to make data difference smaller
+        actual_val = get_expected_value(result['actual'])
         actual_z_score = (actual_val - mean) / sd
 
         # If the values are more than one standard deviation apart, use MAE. Otherwise, MSE.
         hyper_param = 1
+        # We use z-scores so that we can use this loss function regardless of the magnitude of the data.
         if abs(actual_z_score - expected_z_score) <= hyper_param:
             huber_loss_sum += (actual_val - expected_val)**2
         else:
@@ -48,6 +50,8 @@ def calc_huber_loss(results):
     return huber_loss_sum / len(results)
         
 
+# To normalize our data for huber loss, we use this function to find the standard deviation and mean of the expected
+# results.
 def calc_distribution(results):
     mean = 0
     for result in results:
@@ -61,15 +65,21 @@ def calc_distribution(results):
     return mean, standard_deviation
 
 
+# Calculates the root mean squared error, which we can interpret as roughly the expected difference of our algorithm's
+# output and the right output.
 def calc_rmse(results):
     rmse_sum = 0
     for result in results:
         expected_val = result['expected']
         actual_val = get_expected_value(result['actual'])
+        # Add the squared difference
         rmse_sum += (expected_val - actual_val)**2
+    # Take the root at the end to transfer from mse to rmse.
     return math.sqrt(rmse_sum / len(results))
 
 
+# Calculate the expected value given a class distribution (the output of running our algorithms) of the nearest
+# neighbors. This is meant for regressions where the classes are actually numeric values themselves.
 def get_expected_value(distribution):
     weighted_sum = 0
     for value in distribution:
@@ -77,6 +87,7 @@ def get_expected_value(distribution):
     return weighted_sum
 
 
+# Chooses the highest class in the class distribution.
 def get_highest_class(classes):
     highest_cls = None
     for cls in classes:

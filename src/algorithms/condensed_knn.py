@@ -1,20 +1,27 @@
+# condensed_knn.py
+# Implementation of condensed KNN algorithm, which we create as a subclass of the KNN class.
+
 from src.algorithms.knn import KNN  # change to src.algorithms.knn
 from src.datasets.data_set import DataSet
 import random
 
-
+# Condensed KNN algorithm. Training data is automatically reduced. To classify, use KNN's "run" method.
 class CondensedKNN(KNN):
 
+    # Upon creation of the model, the training data is reduced. We can subsequently use the 'run' method from KNN once
+    # the object is created.
     def __init__(self, training_data, k):
         super().__init__(training_data, k)
         self.training_data = self.condense_training_data(training_data.copy())
 
+    # Condenses the self.training_data into a smaller version that should hopefully not lose much accuracy.
     def condense_training_data(self, original_data):
         condensed_training_set = []
         training_list = original_data.get_data().copy()
         random.shuffle(training_list)
-
         prev_training_set = None
+
+        # While our data set is shrinking...
         while prev_training_set is None or len(prev_training_set) != len(condensed_training_set):
             prev_training_set = condensed_training_set
             # Loop through the randomized data set
@@ -37,7 +44,6 @@ class CondensedKNN(KNN):
     
     def calculate_closest_prototype(self, noncondensed_ele, condensed_training_set):
         """Finds the closest prototype to this element"""
-        
         min_dist_prototype = self.training_data.distance(noncondensed_ele, condensed_training_set[0])  # Initialize min distance
         closest_prototype = condensed_training_set[0]
         # Loop through condensed training set to find the closest prototype

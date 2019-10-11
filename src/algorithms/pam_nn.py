@@ -1,14 +1,21 @@
+# pam_nn.py
+# Implementation of the PAM algorithm, with additional nearest neighbor functionality.
 import random
 import src.util as util
 
 
+# The PAM implementation. This will attempt to find k clusters in the training data, and stores the class distribution
+# of points belonging to these clusters in order to perform a nearest neighbor classification later on.
 class PamNN:
 
+    # Creates an instance of the PAM algorithm. Clusters and their medoids are calculated upon object creation so that
+    # the run method can be used right away.
     def __init__(self, training_data, k):
         self.training_data = training_data.copy()
         self.k = k
         self.medoids, self.clusters, self.cluster_classes, self.distortion = self.calculate_medoids(k)
 
+    # The calculation of medoids, clusters, cluster class distributions, and final distortion using the PAM algorithm.
     def calculate_medoids(self, k):
         # We randomly choose our medoids to begin.
         medoids = random.sample(self.training_data.data, self.k)
@@ -22,9 +29,7 @@ class PamNN:
             # Reset the clusters to have 0 observations.
             clusters = self.assign_clusters(self.training_data.data, medoids)
 
-            # We maintain the initial distortion for comparison later.
-            # *OPTIMIZATION*: we segment distortion by calculating the distortion within each cluster. This way, we only
-            # need to recalculate distortion for the clusters that change.
+            # We maintain the initial distortion for comparison later. In addition, we maintain the best possible swap.
             min_distortion = self.calculate_distortion(clusters, medoids)
             best_swap = None
             # We select a medoid (by index)
@@ -54,11 +59,13 @@ class PamNN:
                         # We now reverse our swap.
                         medoids[medoid_i] = m
                         cluster[i] = x
+            # If we have a swap that leads to the lowest distortion, then we perform it for real.
             if best_swap is not None:
                 m = medoids[best_swap[0]]
                 x = clusters[best_swap[1][0]][best_swap[1][1]]
                 medoids[best_swap[0]] = x
                 clusters[best_swap[1][0]][best_swap[1][1]] = m
+            # If there is no best swap, then we could not find a swap that lowered distortion. We then exit.
             else:
                 break
         # We will track the distortion of the final clusters:
@@ -113,6 +120,8 @@ class PamNN:
                 clusters[closest_centroid_i].append(obs)
         return clusters
 
+    # Classifies the given example using the clusters found by PAM. We simply find the nearest cluster to our example
+    # point and then classify it according to the probability distribution of that cluster.
     def run(self, example):
         closest_centroid_i = self.find_closest_medoid(example, self.medoids)
         return self.cluster_classes[closest_centroid_i]

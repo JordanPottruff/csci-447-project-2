@@ -1,5 +1,8 @@
+# driver.py
+# This is what we used to setup our experimental design. Running this as is will take hours, as it conducts
+# cross-validation for all algorithm and data set combinations. We use numpy and matplotlib as external libraries. See
+# the main function to understand the process used.
 
-import src.util as util
 import src.loss as loss
 import src.datasets.data_set as ds
 import src.algorithms.k_means as kmeans
@@ -11,42 +14,61 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
+
+# Runs the given algorithm on the data set for all values of k. The output is a map that stores various information,
+# including the k-values used, the resulting loss values for each k-value, and the size of the training data (which is
+# particularly useful if the algorithm reduces the training data).
 def run_classification(alg_class, data_set, k_values):
     print("-----------------------------------------")
     print("CLASSIFICATION USING " + alg_class.__name__)
     print("Data: " + data_set.filename)
     print(" * N = " + str(len(data_set.data)))
 
+    # Gather the the "folds" for 10-fold cv:
     folds = data_set.validation_folds(10)
+
+    # We will store the following metrics for each value of k:
     training_data_sizes = []
     accuracies = []
     hinge_losses = []
+
+    # For each value of k:
     for i, k in enumerate(k_values):
         print("[" + str(i+1) + "] k=" + str(k) + " using 10-fold CV")
+        # Initialize averages across all folds to start at 0
         avg_accuracy = 0
         avg_hinge_loss = 0
         avg_training_size = 0
         print(" * Folds Complete: ", end='', flush=True)
+
+        # Iterate through each testing fold:
         for fold_i, fold in enumerate(folds):
+            # Get the test and training data sets for the fold
             test = fold['test']
             train = fold['train']
             alg = alg_class(train, k)
 
+            # We want to run multiple test examples in bulk and store the results
             results = []
             for obs in test.data:
                 result = {"expected": obs[data_set.class_col], "actual": alg.run(obs)}
                 results.append(result)
 
+            # We then update the loss functions
             accuracy = loss.calc_accuracy(results)
             hinge_loss = loss.calc_hinge(results)
             avg_accuracy += accuracy / len(folds)
             avg_hinge_loss += hinge_loss / len(folds)
+            # Also save the training data size
             avg_training_size += len(alg.training_data.data) / len(folds)
+
             print(fold_i+1, end='', flush=True)
             if fold_i == len(folds)-1:
                 print()
             else:
                 print(", ", end='', flush=True)
+
+        # Finally, we store the averages for the k-value:
         avg_accuracy = float("{:.2f}".format(avg_accuracy))
         avg_hinge_loss = float("{:.2f}".format(avg_hinge_loss))
         accuracies.append(avg_accuracy)
@@ -57,9 +79,13 @@ def run_classification(alg_class, data_set, k_values):
         print("   - Avg hinge loss = " + str(avg_hinge_loss))
         print()
 
+    # We return all the information we need to create a chart of the data:
     return {"k-values": k_values, "losses": [accuracies, hinge_losses], "data-sizes": training_data_sizes}
 
 
+# Runs the given algorithm on the regression data set for all values of k. The output is a map that stores various
+# information, including the k-values used, the resulting loss values for each k-value, and the size of the training
+# data (which is particularly useful if the algorithm reduces the training data).
 def run_regression(alg_class, data_set, k_values):
     print("-----------------------------------------")
     print("REGRESSION USING " + alg_class.__name__)
@@ -108,6 +134,8 @@ def run_regression(alg_class, data_set, k_values):
 
     return {"k-values": k_values, "losses": [rmse_losses, huber_losses], "data-sizes": training_data_sizes}
 
+
+# This allows us to create a chart of a given metric.
 def create_metric_chart(results):
     """Generates a table comparing the accuracies for each data set. Parameter input is dictionary with a key
     and a value that is a tuple with 2 lists{key: ([],[])}"""
@@ -168,13 +196,15 @@ def create_metric_chart(results):
     fig.tight_layout()
     plt.show()
 
-
+# This formats the data so that we can create a chart out of it.
 def create_chart_data(title, data_set_names, outputs, loss_name, loss_index):
     data = {'title': title, 'loss-type': loss_name, 'output': {}}
     for i in range(len(data_set_names)):
         data['output'][data_set_names[i]] = [outputs[i]["k-values"], outputs[i]["losses"][loss_index]]
     return data
 
+# Entry-point of the program. We gather all our data sets and then run each algorithm one-by-one, displaying information
+# to the terminal as we go along. At the end, we create numerous matplotlib charts for our paper.
 def main():
     # Classification data sets
     abalone_data = ds.get_abalone_data()
