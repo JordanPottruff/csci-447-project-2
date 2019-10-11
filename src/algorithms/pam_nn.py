@@ -95,6 +95,12 @@ class PamNN:
                 distortion += self.training_data.distance(obs, medoid)
         return distortion
 
+    def calculate_one_distortion(self, cluster, medoid):
+        distortion = 0
+        for obs in cluster:
+            distortion += self.training_data.distance(obs, medoid)
+        return distortion
+
     def assign_clusters(self, examples, medoids):
         # Set each cluster to be empty
         clusters = [[] for i in range(self.k)]

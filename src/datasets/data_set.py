@@ -3,12 +3,12 @@ import random
 import math
 import src.util as util
 
-ABALONE_DATA_FILE = "../data/abalone.data"
-CAR_DATA_FILE = "../data/car.data"
-FOREST_FIRE_DATA_FILE = "../data/forestfires.data"
-MACHINE_DATA_FILE = "../data/machine.data"
-SEGMENTATION_DATA_FILE = "../data/segmentation.data"
-WINE_DATA_FILE = "../data/winequality.data"
+ABALONE_DATA_FILE = "data/abalone.data"
+CAR_DATA_FILE = "data/car.data"
+FOREST_FIRE_DATA_FILE = "data/forestfires.data"
+MACHINE_DATA_FILE = "data/machine.data"
+SEGMENTATION_DATA_FILE = "data/segmentation.data"
+WINE_DATA_FILE = "data/winequality.data"
 
 class DataSet:
 
@@ -129,6 +129,9 @@ class DataSet:
             folds[i]['train'] = DataSet(train, self.class_col, self.attr_cols)
         return folds
 
+    def sample(self, k):
+        self.data = random.sample(self.data, k)
+
     # Prints the data set nicely.
     def print(self):
         print()
@@ -180,6 +183,7 @@ def get_forest_fires_data():
     forest_fires_data.normalize_z_score([0, 1, 4, 5, 6, 7, 8, 9, 10, 11])
     # Randomly shuffle values.
     forest_fires_data.shuffle()
+    forest_fires_data.sample(250)
     return forest_fires_data
 
 
