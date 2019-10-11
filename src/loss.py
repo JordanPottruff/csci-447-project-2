@@ -3,6 +3,7 @@ import math
 
 def calc_accuracy(results):
     correct = 0
+    print(results)
     for result in results:
         expected_cls = result['expected']
         actual_dist = result['actual']

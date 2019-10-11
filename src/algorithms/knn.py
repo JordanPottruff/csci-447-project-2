@@ -6,7 +6,7 @@ import src.util as util
 class KNN:
 
     def __init__(self, training_data, k):
-        self.training_data = training_data
+        self.training_data = training_data.copy()
         self.k = k
         self.last_nearest_neighbors = None
 

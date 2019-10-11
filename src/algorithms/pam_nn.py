@@ -5,7 +5,7 @@ import src.util as util
 class PamNN:
 
     def __init__(self, training_data, k):
-        self.training_data = training_data
+        self.training_data = training_data.copy()
         self.k = k
         self.medoids, self.clusters, self.cluster_classes, self.distortion = self.calculate_medoids(k)
 

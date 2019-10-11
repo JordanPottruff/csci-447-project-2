@@ -23,6 +23,9 @@ class DataSet:
         self.attr_cols = attr_cols
         self.filename = filename
 
+    def copy(self):
+        return DataSet(self.data.copy(), self.class_col, self.attr_cols.copy(), self.filename)
+
     # Returns the data as a 2D list.
     def get_data(self):
         return self.data

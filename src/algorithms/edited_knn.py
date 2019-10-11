@@ -8,8 +8,7 @@ import src.loss as loss
 class EditedKNN(KNN):
     def __init__(self, training_data, k):
         super().__init__(training_data, k)
-        self.training_data = training_data
-        self.removed_data_set = []
+        self.training_data = training_data.copy()
         self.find_edited_data()
         self.edited_data_size = self.get_edited_data_size()
 
@@ -29,11 +28,6 @@ class EditedKNN(KNN):
             else:
                 length -= 1
                 counter = 0
-
-
-
-    def validate_accuracy(self):
-        return loss.calc_accuracy([{"actual": self.run(example), "expected": example[self.validation_data.class_col]} for example in self.validation_data.data]) / len(self.validation_data.data)
 
     # Returns the length of the edited_data_set
     def get_edited_data_size(self):

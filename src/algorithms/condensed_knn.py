@@ -7,7 +7,7 @@ class CondensedKNN(KNN):
 
     def __init__(self, training_data, k):
         super().__init__(training_data, k)
-        self.training_data = self.condense_training_data(training_data)
+        self.training_data = self.condense_training_data(training_data.copy())
 
     def condense_training_data(self, original_data):
         condensed_training_set = []
