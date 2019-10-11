@@ -51,7 +51,7 @@ def run_classification(alg_class, data_set, k_values):
         avg_hinge_loss = float("{:.2f}".format(avg_hinge_loss))
         accuracies.append(avg_accuracy)
         hinge_losses.append(avg_hinge_loss)
-        training_data_sizes.append(avg_training_size)
+        training_data_sizes.append(int(avg_training_size))
         print(" * Results: ")
         print("   - Avg accuracy = " + str(avg_accuracy))
         print("   - Avg hinge loss = " + str(avg_hinge_loss))
@@ -100,7 +100,7 @@ def run_regression(alg_class, data_set, k_values):
         avg_huber_loss = float("{:.2f}".format(avg_huber_loss))
         rmse_losses.append(avg_rmse)
         huber_losses.append(avg_huber_loss)
-        training_data_sizes.append(avg_training_size)
+        training_data_sizes.append(int(avg_training_size))
         print(" * Results: ")
         print("   - Avg root mean squared error = " + str(avg_rmse))
         print("   - Avg huber loss = " + str(avg_huber_loss))
@@ -218,8 +218,8 @@ def main():
     accuracy_cknn = create_chart_data("Condensed KNN", ["abalone", "car", "image"], [cknn_abalone, cknn_car, cknn_image], "Accuracy", 0)
     hinge_cknn = create_chart_data("Condensed KNN", ["abalone", "car", "image"], [cknn_abalone, cknn_car, cknn_image], "Hinge Loss", 1)
 
-    classification_clusters = {"abalone": int(eknn_abalone["data-sizes"]), "car": int(eknn_car["data-sizes"]), "image": int(eknn_image["data-sizes"])}
-    regression_clusters = {"forest fires": int(len(forest_fires_data.data) / 4), "machine": int(len(machine_data.data) / 4), "wine": int(len(wine_data.data) / 4)}
+    classification_clusters = {"abalone": eknn_abalone["data-sizes"], "car": eknn_car["data-sizes"], "image": eknn_image["data-sizes"]}
+    regression_clusters = {"forest fires": [len(forest_fires_data.data) / 4 for i in range(3)], "machine": [len(machine_data.data) / 4 for i in range(3)], "wine": [len(wine_data.data) / 4 for i in range(3)]}
 
     # CLUSTER ESTIMATES
     print("Cluster estimates: ")
