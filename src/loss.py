@@ -1,3 +1,5 @@
+# loss.py
+# Definition of loss functions and any helper functions required for calculating the loss.
 import math
 
 # Simple accuracy calculation given a list of results
