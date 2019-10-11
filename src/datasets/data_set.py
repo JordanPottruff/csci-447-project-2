@@ -3,12 +3,12 @@ import random
 import math
 import src.util as util
 
-ABALONE_DATA_FILE = "data/abalone.data"
-CAR_DATA_FILE = "data/car.data"
-FOREST_FIRE_DATA_FILE = "data/forestfires.data"
-MACHINE_DATA_FILE = "data/machine.data"
-SEGMENTATION_DATA_FILE = "data/segmentation.data"
-WINE_DATA_FILE = "data/winequality.data"
+ABALONE_DATA_FILE = "../data/abalone.data"
+CAR_DATA_FILE = "../data/car.data"
+FOREST_FIRE_DATA_FILE = "../data/forestfires.data"
+MACHINE_DATA_FILE = "../data/machine.data"
+SEGMENTATION_DATA_FILE = "../data/segmentation.data"
+WINE_DATA_FILE = "../data/winequality.data"
 
 class DataSet:
 
