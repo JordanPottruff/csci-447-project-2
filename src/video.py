@@ -8,6 +8,7 @@ from src.algorithms.pam_nn import PamNN
 
 THREE_CLUSTERS_DATA_FILE = "../data/test/three_clusters.data"
 
+
 def test_knn():
     print("TESTING KNN")
     print("--------------------------------------------------")
@@ -40,6 +41,7 @@ def test_knn():
         print(" * {:.2f}".format(neighbor[0]), neighbor[1])
     print()
 
+
 def test_edited_knn():
     print("TESTING EDITED KNN")
     print("--------------------------------------------------")
@@ -64,6 +66,7 @@ def test_edited_knn():
         else:
             print(" * N/A")
     print()
+
 
 def test_condensed_knn():
     print("TESTING CONDENSED KNN")
@@ -103,6 +106,7 @@ def test_k_means():
     print("Testing: " + str(test_point))
     print(kmeans.run(test_point))
     print()
+
 
 def test_pam_nn():
     print("TESTING PAM-NN")
